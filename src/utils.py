@@ -54,7 +54,8 @@ def save_raw_html(html: str, doc_id: str) -> str:
     safe_doc_id = re.sub(r"[^\w.-]+", "_", doc_id, flags=re.UNICODE)
     file_path = RAW_HTML_DIR / f"{safe_doc_id}.html"
     file_path.write_text(html, encoding="utf-8")
-    return str(file_path.relative_to(PROJECT_ROOT))
+    # return str(file_path.relative_to(PROJECT_ROOT))
+    return file_path.relative_to(PROJECT_ROOT).as_posix()
 
 
 def generate_doc_id(site_domain: str, channel_name: str, index: int, publish_date: str = "") -> str:

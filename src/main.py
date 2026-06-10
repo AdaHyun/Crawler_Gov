@@ -244,7 +244,8 @@ def run() -> None:
                         # 调用下载器，存入附件目录
                         success = download_file(att["url"], ATTACHMENT_DIR, safe_att_name)
                         if success:
-                            att["local_path"] = f"data/attachments/{safe_att_name}"
+                            # att["local_path"] = f"data/attachments/{safe_att_name}"
+                            att["local_path"] = (ATTACHMENT_DIR / safe_att_name).relative_to(PROJECT_ROOT).as_posix()
                             att["download_status"] = "success"
                         else:
                             att["download_status"] = "failed"
@@ -286,7 +287,8 @@ def run() -> None:
                         
                         success = download_file(img_info["url"], item_image_dir, safe_img_name)
                         if success:
-                            img_info["local_path"] = f"data/images/{safe_site_name}/{safe_channel_name}/{safe_article_title}/{safe_img_name}"
+                            # img_info["local_path"] = f"data/images/{safe_site_name}/{safe_channel_name}/{safe_article_title}/{safe_img_name}"
+                            img_info["local_path"] = (item_image_dir / safe_img_name).relative_to(PROJECT_ROOT).as_posix()
                             img_info["download_status"] = "success"
                         else:
                             img_info["download_status"] = "failed"
@@ -300,7 +302,8 @@ def run() -> None:
                         logger.info("正在下载正文附件: %s", safe_att_name)
                         success = download_file(att["url"], item_attachment_dir, safe_att_name)
                         if success:
-                            att["local_path"] = f"data/attachments/{safe_site_name}/{safe_channel_name}/{safe_article_title}/{safe_att_name}"
+                            # att["local_path"] = f"data/attachments/{safe_site_name}/{safe_channel_name}/{safe_article_title}/{safe_att_name}"
+                            att["local_path"] = (item_attachment_dir / safe_att_name).relative_to(PROJECT_ROOT).as_posix()
                             att["download_status"] = "success"
                         else:
                             att["download_status"] = "failed"

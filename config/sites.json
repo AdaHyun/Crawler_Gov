@@ -223,7 +223,7 @@
     "site_url": "https://ncncd.chinacdc.cn/",
     "policy_level": "国家级",
     "crawler_name": "ncncd_crawler_v1",
-    "parser_type": "chinacdc",  
+    "parser_type": "ncncd",  
     "max_pages": 100,
     "request": {
       "timeout": 20

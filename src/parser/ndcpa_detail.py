@@ -60,7 +60,7 @@ def parse_detail_page(html: str, detail_url: str) -> dict:
 
     body_node = _find_body_node(soup)
 
-    # ================= 新增：图片提取与本地化换链逻辑 =================
+    # ================= 图片提取与本地化换链逻辑 =================
     images = []
     if body_node:
         for img in body_node.find_all("img"):

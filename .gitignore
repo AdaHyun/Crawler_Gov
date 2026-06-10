@@ -20,3 +20,5 @@ env/
 # keep only data/output
 !/data/output/
 !/data/output/**
+!/data/logs/
+!/data/logs/**

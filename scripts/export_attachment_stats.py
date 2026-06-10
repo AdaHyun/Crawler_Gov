@@ -184,7 +184,7 @@ def collect_filesystem_attachment_counts():
             if direct_files:
                 counts[(org, channel)] += len(direct_files)
                 org_totals[org] += len(direct_files)
-                rows.append([org, channel, "(栏目目录下文件)", len(direct_files), str(channel_dir)])
+                rows.append([org, channel, "(栏目目录下文件)", len(direct_files), str(channel_dir.relative_to(BASE_DIR))])
             for article_dir in channel_dir.iterdir():
                 if not article_dir.is_dir():
                     continue
@@ -241,7 +241,15 @@ def main():
             downloaded_count = sum(1 for att in attachments if isinstance(att, dict) and att.get("download_status") == "success")
             has_attachment = "是" if max(json_attach_count, downloaded_count) > 0 else "否"
             attachment_names = "; ".join(str(att.get("name", "")) for att in attachments if isinstance(att, dict))
-            attachment_paths = "; ".join(str(att.get("local_path", "")) for att in attachments if isinstance(att, dict))
+            # attachment_paths = "; ".join(str(att.get("local_path", "")) for att in attachments if isinstance(att, dict))
+            _rel_paths = []
+            for att in attachments:
+                if isinstance(att, dict) and att.get("local_path"):
+                    try:
+                        _rel_paths.append(str(Path(att["local_path"]).relative_to(BASE_DIR)))
+                    except ValueError:
+                        _rel_paths.append(str(att["local_path"]))
+            attachment_paths = "; ".join(_rel_paths)
 
             stat = channel_stats[(org, channel)]
             stat["docs"] += 1
@@ -311,8 +319,10 @@ def main():
     note_rows = [
         ["说明项", "内容"],
         ["统计时间", datetime.now().strftime("%Y-%m-%d %H:%M:%S")],
-        ["JSON目录", str(OUTPUT_DIR)],
-        ["附件目录", str(ATTACHMENTS_DIR)],
+        # ["JSON目录", str(OUTPUT_DIR)],
+        # ["附件目录", str(ATTACHMENTS_DIR)],
+        ["JSON目录", str(OUTPUT_DIR.relative_to(BASE_DIR))],
+        ["附件目录", str(ATTACHMENTS_DIR.relative_to(BASE_DIR))],
         ["无附件判定", "JSON附件数和成功下载附件数都为0"],
         ["附件目录文件数", "按 data/attachments/机构/栏目/文章目录 下实际文件数汇总，仅作为本地文件核对"],
         ["解析错误数", len(parse_errors)],
@@ -330,7 +340,36 @@ def main():
             ("附件目录核对", fs_rows),
         ],
     )
-    print(REPORT_PATH)
+    # print(REPORT_PATH)
+    json_report_data = {}
+    
+    # 首先初始化所有的机构总数据条数
+    for org, stat in org_stats.items():
+        json_report_data[org] = {
+            "总数据条数": stat["docs"],
+            "栏目": {}
+        }
+        
+    # 填充各个栏目的数据
+    for (org, channel), stat in channel_stats.items():
+        # 防御性判断：如果没有栏目名字或者机构没被记录的话
+        if org not in json_report_data:
+            json_report_data[org] = {"总数据条数": 0, "栏目": {}}
+            
+        json_report_data[org]["栏目"][channel] = {
+            "数据条数": stat["docs"],
+            "总附件数": stat["json_attach"],  # 以 JSON 中解析到的附件数为准
+            "没有附件的文章数": stat["without"]
+        }
+        
+    # 将 JSON 写出到同级目录下
+    json_report_path = LOGS_DIR / f"crawler_attachment_stats_{datetime.now():%Y%m%d_%H%M%S}.json"
+    with open(json_report_path, "w", encoding="utf-8") as f:
+        json.dump(json_report_data, f, ensure_ascii=False, indent=2)
+    # ----------------------------------------------------------------
+
+    print(f"Excel Report: {REPORT_PATH}")
+    print(f"JSON Report:  {json_report_path}")
 
 
 if __name__ == "__main__":
