@@ -1,0 +1,22 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# virtual environment
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+
+# root zip file
+/data.zip
+
+# ignore all data subfolders/files by default
+/data/*
+
+# keep only data/output
+!/data/output/
+!/data/output/**
