@@ -1,0 +1,264 @@
+[
+  {
+    "site_name": "国家卫生健康委员会",
+    "site_domain": "nhc.gov.cn",
+    "site_url": "https://www.nhc.gov.cn",
+    "policy_level": "国家级",
+    "crawler_name": "nhc_policy_crawler_v1",
+    "parser_type": "nhc",
+    "max_pages": 100,
+    "request": {
+      "timeout": 20,
+      "browser_cookie": "",
+      "note": "如果遇到 412 WAF 拦截，可用浏览器打开 https://www.nhc.gov.cn/ 后，从开发者工具复制 Cookie 到 browser_cookie。也可以设置环境变量 NHC_COOKIE。"
+    },
+    "channels": [
+      {
+        "channel_name": "规范性文件",
+        "channel_url": "https://www.nhc.gov.cn/wjw/gfxwjj/list.shtml",
+        "default_policy_category": "卫生健康政策",
+        "enabled": false
+      },
+      {
+        "channel_name": "工作通知",
+        "channel_url": "https://www.nhc.gov.cn/wjw/gztz/list.shtml",
+        "default_policy_category": "工作通知",
+        "enabled": false
+      },
+      {
+        "channel_name": "政策法规",
+        "channel_url": "https://www.nhc.gov.cn/wjw/zcfg/list.shtml",
+        "default_policy_category": "政策法规",
+        "enabled": false
+      },
+      {
+        "channel_name": "统计年鉴",
+        "channel_url": "https://www.nhc.gov.cn/mohwsbwstjxxzx/tjtjnj/new_list.shtml",
+        "default_policy_category": "统计数据",
+        "enabled": false
+      },
+      {
+        "channel_name": "统计数据",
+        "channel_url": "https://www.nhc.gov.cn/mohwsbwstjxxzx/tjzxtjsj/tjsj_list.shtml",
+        "default_policy_category": "统计数据",
+        "enabled": false
+      }
+    ]
+  },
+  {
+    "site_name": "国家疾病预防控制局",
+    "site_domain": "ndcpa.gov.cn",
+    "site_url": "https://www.ndcpa.gov.cn/",
+    "policy_level": "国家级",
+    "crawler_name": "ndcpa_crawler_v1",
+    "parser_type": "ndcpa",
+    "max_pages": 100,
+    "request": {
+      "timeout": 20
+    },
+    "channels": [
+      {
+        "channel_name": "疾控政策法规",
+        "channel_url": "https://www.ndcpa.gov.cn/jbkzzx/c100012/common/list.html",
+        "default_policy_category": "政策法规",
+        "enabled": false
+      },
+      {
+        "channel_name": "疾病预防控制标准",
+        "channel_url": "https://www.ndcpa.gov.cn/jbkzzx/c100042/common/list.html",
+        "default_policy_category": "卫生标准",
+        "enabled": false
+      },
+      {
+        "channel_name": "政策解读",
+        "channel_url": "https://www.ndcpa.gov.cn/jbkzzx/c100013/common/list.html", 
+        "default_policy_category": "政策解读",
+        "enabled": false
+      },
+      {
+        "channel_name": "疫情信息",
+        "channel_url": "https://www.ndcpa.gov.cn/jbkzzx/c100016/second/list.html", 
+        "default_policy_category": "疫情信息",
+        "enabled": false
+      },
+      {
+        "channel_name": "法定传染病目录",
+        "channel_url": "https://www.ndcpa.gov.cn/jbkzzx/c100041/common/list.html",
+        "default_policy_category": "科普信息",
+        "enabled": true
+      },
+      {
+        "channel_name": "疾控科普",
+        "channel_url": "https://www.ndcpa.gov.cn/jbkzzx/c100040/common/list.html",
+        "default_policy_category": "科普信息",
+        "enabled": true
+      }
+    ]
+  },
+  {
+    "site_name": "中国疾病预防控制中心",
+    "site_domain": "chinacdc.cn",
+    "site_url": "https://www.chinacdc.cn/",
+    "policy_level": "国家级",
+    "crawler_name": "chinacdc_crawler_v1",
+    "parser_type": "chinacdc",
+    "max_pages": 100,
+    "request": {
+      "timeout": 20
+    },
+    "channels": [
+      {
+        "channel_name": "全国法定传染病疫情情况",
+        "channel_url": "https://www.chinacdc.cn/jksj/jksj01/",
+        "default_policy_category": "疫情信息",
+        "enabled": false
+      },
+      {
+        "channel_name": "全国新型冠状病毒感染疫情情况",
+        "channel_url": "https://www.chinacdc.cn/jksj/xgbdyq/",
+        "default_policy_category": "疫情信息",
+        "enabled": false
+      },
+      {
+        "channel_name": "重点传染病和突发公共卫生事件风险评估报告",
+        "channel_url": "https://www.chinacdc.cn/jksj/jksj02/",
+        "default_policy_category": "风险评估",
+        "enabled": false
+      },
+      {
+        "channel_name": "全球传染病疫情风险评估报告",
+        "channel_url": "https://www.chinacdc.cn/jksj/jksj03/",
+        "default_policy_category": "风险评估",
+        "enabled": true
+      },
+      {
+        "channel_name": "全国预防接种异常反应监测信息概况",
+        "channel_url": "https://www.chinacdc.cn/jksj/jksj04_14209/",
+        "default_policy_category": "健康数据",
+        "enabled": true
+      },
+      {
+        "channel_name": "流感监测周报",
+        "channel_url": "https://www.chinacdc.cn/jksj/jksj04_14249/",
+        "default_policy_category": "健康数据",
+        "enabled": true
+      },
+      {
+        "channel_name": "全国急性呼吸道传染病哨点监测情况",
+        "channel_url": "https://www.chinacdc.cn/jksj/jksj04_14275/",
+        "default_policy_category": "健康数据",
+        "enabled": true
+      },
+      {
+        "channel_name": "健康报告",
+        "channel_url": "https://www.chinacdc.cn/jksj/jksj04/",
+        "default_policy_category": "健康数据",
+        "enabled": true
+      },
+      {
+        "channel_name": "科技进展",
+        "channel_url": "https://www.chinacdc.cn/kxyj/kjjz/",
+        "default_policy_category": "科研动态",
+        "enabled": true
+      },
+      {
+        "channel_name": "学术动态",
+        "channel_url": "https://www.chinacdc.cn/kxyj/xsdt/",
+        "default_policy_category": "科研动态",
+        "enabled": true
+      },
+      {
+        "channel_name": "科研平台",
+        "channel_url": "https://www.chinacdc.cn/kxyj/xsjl/",
+        "default_policy_category": "科研动态",
+        "enabled": true
+      },
+      {
+        "channel_name": "科研亮点",
+        "channel_url": "https://www.chinacdc.cn/kxyj/kyld/",
+        "default_policy_category": "科研动态",
+        "enabled": true
+      },
+      {
+        "channel_name": "科技成果",
+        "channel_url": "https://www.chinacdc.cn/kxyj/kyld_14420/",
+        "default_policy_category": "科研动态",
+        "enabled": true
+      },
+      {
+        "channel_name": "科技政策",
+        "channel_url": "https://www.chinacdc.cn/kxyj/kjzc/",
+        "default_policy_category": "科研动态",
+        "enabled": true
+      },
+      {
+        "channel_name": "合作伙伴",
+        "channel_url": "https://www.chinacdc.cn/qqgw/hzhb/",
+        "default_policy_category": "全球公卫",
+        "enabled": true
+      },
+      {
+        "channel_name": "世界卫生组织合作中心和参比实验室",
+        "channel_url": "https://www.chinacdc.cn/qqgw/wszz/",
+        "default_policy_category": "全球公卫",
+        "enabled": true
+      },
+      {
+        "channel_name": "国际交流(港澳台交流)",
+        "channel_url": "https://www.chinacdc.cn/qqgw/gjjl/",
+        "default_policy_category": "全球公卫",
+        "enabled": true
+      },
+      {
+        "channel_name": "公共卫生援外与合作",
+        "channel_url": "https://www.chinacdc.cn/qqgw/ggws/rhcx/",
+        "default_policy_category": "全球公卫",
+        "enabled": true
+      }
+    ]
+  },
+  {
+    "site_name": "中国疾控中心慢病中心",
+    "site_domain": "ncncd.chinacdc.cn",
+    "site_url": "https://ncncd.chinacdc.cn/",
+    "policy_level": "国家级",
+    "crawler_name": "ncncd_crawler_v1",
+    "parser_type": "chinacdc",  
+    "max_pages": 100,
+    "request": {
+      "timeout": 20
+    },
+    "channels": [
+      {
+        "channel_name": "监测与数据",
+        "channel_url": "https://ncncd.chinacdc.cn/jcysj/",
+        "default_policy_category": "统计数据",
+        "enabled": false 
+      },
+      {
+        "channel_name": "健康生活方式",
+        "channel_url": "https://ncncd.chinacdc.cn/jkzt_14579/jiankangshfs/",
+        "default_policy_category": "健康科普",
+        "enabled": true
+      },
+      {
+        "channel_name": "重点慢病防治",
+        "channel_url": "https://ncncd.chinacdc.cn/jkzt_14579/zhongdianmbfz/",
+        "default_policy_category": "健康科普",
+        "enabled": true
+      },
+      {
+        "channel_name": "伤害预防",
+        "channel_url": "https://ncncd.chinacdc.cn/jkzt_14579/shanghaiyf/",
+        "default_policy_category": "健康科普",
+        "enabled": true
+      },
+      {
+        "channel_name": "老年健康",
+        "channel_url": "https://ncncd.chinacdc.cn/jkzt_14579/laonianjk/",
+        "default_policy_category": "健康科普",
+        "enabled": true
+      }
+    ]
+  }
+]
