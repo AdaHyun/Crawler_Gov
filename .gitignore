@@ -12,10 +12,11 @@ env/
 .idea/
 
 # root zip file
-/data.zip
+/data1.zip
 
 # ignore all data subfolders/files by default
 /data/*
+/data1/
 
 # keep only data/output
 !/data/output/

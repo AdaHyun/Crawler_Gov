@@ -11,7 +11,8 @@ from utils import clean_text, extract_date
 
 import hashlib
 
-ATTACHMENT_SUFFIX_RE = re.compile(r"\.(pdf|doc|docx|xls|xlsx|zip)(?:$|\?)", re.IGNORECASE)
+# ATTACHMENT_SUFFIX_RE = re.compile(r"\.(pdf|doc|docx|xls|xlsx|zip)(?:$|\?)", re.IGNORECASE)
+ATTACHMENT_SUFFIX_RE = re.compile(r"\.(pdf|doc|docx|xls|xlsx|ppt|pptx|csv|txt|zip|rar|7z)(?:$|\?)", re.IGNORECASE)
 
 
 def _extract_title(soup: BeautifulSoup) -> str:
@@ -52,9 +53,37 @@ def _find_body_node(soup: BeautifulSoup):
 import hashlib  # 请确保文件最上方有这个导入
 
 def parse_detail_page(html: str, detail_url: str) -> dict:
+    # ================= 新增：原始 HTML 底层抢救逻辑 =================
+    # 在 BeautifulSoup 清理之前，暴力抓取藏在 <script> document.write 里的附件
+    attachments = []
+    seen_urls = set()
+    
+    raw_a_tags = re.finditer(r'<a\s+[^>]*href=[\'"]([^\'"]+?)[\'"][^>]*>(.*?)</a>', html, re.IGNORECASE)
+    for match in raw_a_tags:
+        href = match.group(1).strip()
+        # 移除可能嵌套的 HTML 标签，提取纯文本
+        inner_text = clean_text(re.sub(r'<[^>]+>', '', match.group(2))) 
+        
+        if not href or href.startswith("javascript:") or href == "#":
+            continue
+            
+        full_url = urljoin(detail_url, href)
+        if ATTACHMENT_SUFFIX_RE.search(full_url) and full_url not in seen_urls:
+            file_name = inner_text or href.split("/")[-1]
+            file_type = file_name.split(".")[-1].lower() if "." in file_name else "unknown"
+            attachments.append({
+                "name": file_name,
+                "url": full_url,
+                "file_type": file_type,
+                "local_path": "",
+                "download_status": "pending"
+            })
+            seen_urls.add(full_url)
+    # ================================================================
+
     soup = BeautifulSoup(html, "lxml")
 
-    # 去掉脚本和样式
+    # 去掉脚本和样式 (此操作会销毁 script 标签，但上面我们已经把里面的附件救出来了)
     for node in soup(["script", "style", "noscript", "iframe"]):
         node.decompose()
 
@@ -104,22 +133,49 @@ def parse_detail_page(html: str, detail_url: str) -> dict:
     if source_match:
         source_department = clean_text(source_match.group(1))
 
-    # 提取附件
-    attachments = []
-    seen_urls = set()
-    for a_tag in body_node.find_all("a", href=True):
+    # ================= 附件提取逻辑 (增强版) =================
+    # 扩大搜索范围：扫描全网页 (soup) 而不仅仅是正文容器 (body_node)
+    for a_tag in soup.find_all("a", href=True):
         href = a_tag.get("href", "").strip()
+        
+        if not href or href.startswith("javascript:") or href == "#":
+            continue
+
         full_url = urljoin(detail_url, href)
+        
+        # 获取标签的文本和 title 属性
+        text = clean_text(a_tag.get_text(" ", strip=True))
+        title_attr = clean_text(a_tag.get("title", ""))
+        
+        lower_text = text.lower()
+        lower_title = title_attr.lower()
+
+        # 匹配逻辑：URL 后缀命中，或者链接的文字内容明示了它是一个文档
         match = ATTACHMENT_SUFFIX_RE.search(full_url)
-        if match and full_url not in seen_urls:
+        # has_doc_text = any(ext in lower_text or ext in lower_title for ext in ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.zip', '.rar'])
+        has_doc_text = any(ext in lower_text or ext in lower_title for ext in ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.csv', '.txt', '.zip', '.rar', '.7z'])
+
+        if (match or has_doc_text) and full_url not in seen_urls:
+            # 优先使用 title 属性命名
+            file_name = title_attr or text or href.split("/")[-1]
+            
+            # 推断文件后缀类型
+            if match:
+                file_type = match.group(1).lower()
+            elif "." in file_name:
+                file_type = file_name.split(".")[-1].lower()
+            else:
+                file_type = "unknown"
+
             attachments.append({
-                "name": clean_text(a_tag.get_text(" ", strip=True)) or href.split("/")[-1],
+                "name": file_name,
                 "url": full_url,
-                "file_type": match.group(1).lower(),
+                "file_type": file_type,
                 "local_path": "",               
                 "download_status": "pending"    
             })
             seen_urls.add(full_url)
+    # ==================================================================
 
     return {
         "title": _extract_title(soup),

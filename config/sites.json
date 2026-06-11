@@ -17,31 +17,25 @@
         "channel_name": "规范性文件",
         "channel_url": "https://www.nhc.gov.cn/wjw/gfxwjj/list.shtml",
         "default_policy_category": "卫生健康政策",
-        "enabled": false
+        "enabled": true
       },
       {
         "channel_name": "工作通知",
         "channel_url": "https://www.nhc.gov.cn/wjw/gztz/list.shtml",
         "default_policy_category": "工作通知",
-        "enabled": false
+        "enabled": true
       },
       {
         "channel_name": "政策法规",
         "channel_url": "https://www.nhc.gov.cn/wjw/zcfg/list.shtml",
         "default_policy_category": "政策法规",
-        "enabled": false
-      },
-      {
-        "channel_name": "统计年鉴",
-        "channel_url": "https://www.nhc.gov.cn/mohwsbwstjxxzx/tjtjnj/new_list.shtml",
-        "default_policy_category": "统计数据",
-        "enabled": false
+        "enabled": true
       },
       {
         "channel_name": "统计数据",
         "channel_url": "https://www.nhc.gov.cn/mohwsbwstjxxzx/tjzxtjsj/tjsj_list.shtml",
         "default_policy_category": "统计数据",
-        "enabled": false
+        "enabled": true
       }
     ]
   },
@@ -61,25 +55,25 @@
         "channel_name": "疾控政策法规",
         "channel_url": "https://www.ndcpa.gov.cn/jbkzzx/c100012/common/list.html",
         "default_policy_category": "政策法规",
-        "enabled": false
+        "enabled": true
       },
       {
         "channel_name": "疾病预防控制标准",
         "channel_url": "https://www.ndcpa.gov.cn/jbkzzx/c100042/common/list.html",
         "default_policy_category": "卫生标准",
-        "enabled": false
+        "enabled": true
       },
       {
         "channel_name": "政策解读",
         "channel_url": "https://www.ndcpa.gov.cn/jbkzzx/c100013/common/list.html", 
         "default_policy_category": "政策解读",
-        "enabled": false
+        "enabled": true
       },
       {
         "channel_name": "疫情信息",
         "channel_url": "https://www.ndcpa.gov.cn/jbkzzx/c100016/second/list.html", 
         "default_policy_category": "疫情信息",
-        "enabled": false
+        "enabled": true
       },
       {
         "channel_name": "法定传染病目录",
@@ -111,19 +105,19 @@
         "channel_name": "全国法定传染病疫情情况",
         "channel_url": "https://www.chinacdc.cn/jksj/jksj01/",
         "default_policy_category": "疫情信息",
-        "enabled": false
+        "enabled": true
       },
       {
         "channel_name": "全国新型冠状病毒感染疫情情况",
         "channel_url": "https://www.chinacdc.cn/jksj/xgbdyq/",
         "default_policy_category": "疫情信息",
-        "enabled": false
+        "enabled": true
       },
       {
         "channel_name": "重点传染病和突发公共卫生事件风险评估报告",
         "channel_url": "https://www.chinacdc.cn/jksj/jksj02/",
         "default_policy_category": "风险评估",
-        "enabled": false
+        "enabled": true
       },
       {
         "channel_name": "全球传染病疫情风险评估报告",
@@ -233,7 +227,7 @@
         "channel_name": "监测与数据",
         "channel_url": "https://ncncd.chinacdc.cn/jcysj/",
         "default_policy_category": "统计数据",
-        "enabled": false 
+        "enabled": true 
       },
       {
         "channel_name": "健康生活方式",

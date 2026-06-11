@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from urllib.parse import urljoin, urlparse
+from urllib.parse import urljoin
 import hashlib  # 新增
 
 from bs4 import BeautifulSoup
@@ -11,7 +11,8 @@ from bs4 import BeautifulSoup
 from utils import clean_text, extract_date
 
 
-ATTACHMENT_SUFFIX_RE = re.compile(r"\.(pdf|doc|docx|xls|xlsx|zip)(?:$|\?)", re.IGNORECASE)
+# 包含了所有可能的文件后缀
+ATTACHMENT_SUFFIX_RE = re.compile(r"\.(pdf|doc|docx|xls|xlsx|ppt|pptx|csv|txt|zip|rar|7z)(?:$|\?)", re.IGNORECASE)
 
 
 def _extract_title(soup: BeautifulSoup) -> str:
@@ -70,37 +71,82 @@ def _find_body_node(soup: BeautifulSoup):
     return soup.body or soup
 
 
-def _extract_attachments(body_node, detail_url: str) -> list[dict]:
-    """识别 PDF、Office、ZIP 等附件链接，但不下载文件。"""
+def _extract_attachments(html: str, soup: BeautifulSoup, detail_url: str) -> list[dict]:
+    """终极附件提取：底层 HTML 抢救 + 全局扫描 + 文本嗅探。"""
     attachments = []
     seen_urls = set()
 
-    for a_tag in body_node.find_all("a", href=True):
-        href = a_tag.get("href", "").strip()
+    # 1. 原始 HTML 底层抢救逻辑 (对付藏在 script 里的附件)
+    raw_a_tags = re.finditer(r'<a\s+[^>]*href=[\'"]([^\'"]+?)[\'"][^>]*>(.*?)</a>', html, re.IGNORECASE)
+    for match in raw_a_tags:
+        href = match.group(1).strip()
+        inner_text = clean_text(re.sub(r'<[^>]+>', '', match.group(2))) 
+        
+        if not href or href.startswith("javascript:") or href == "#":
+            continue
+            
         full_url = urljoin(detail_url, href)
-        parsed = urlparse(full_url)
-        match = ATTACHMENT_SUFFIX_RE.search(parsed.path)
-        if not match or full_url in seen_urls:
+        if ATTACHMENT_SUFFIX_RE.search(full_url) and full_url not in seen_urls:
+            file_name = inner_text or href.split("/")[-1]
+            file_type = file_name.split(".")[-1].lower() if "." in file_name else "unknown"
+            attachments.append({
+                "name": file_name,
+                "url": full_url,
+                "file_type": file_type,
+                "local_path": "",
+                "download_status": "pending"
+            })
+            seen_urls.add(full_url)
+
+    # 2. 全局扫描与文本兜底嗅探
+    for a_tag in soup.find_all("a", href=True):
+        href = a_tag.get("href", "").strip()
+        
+        if not href or href.startswith("javascript:") or href == "#":
             continue
 
-        name = clean_text(a_tag.get_text(" ", strip=True)) or parsed.path.rsplit("/", 1)[-1]
-        attachments.append({
-            "name": name,
-            "url": full_url,
-            "file_type": match.group(1).lower(),
-            "local_path": "",               # 新增同步字段
-            "download_status": "pending"    # 新增同步字段
-        })
-        seen_urls.add(full_url)
+        full_url = urljoin(detail_url, href)
+        text = clean_text(a_tag.get_text(" ", strip=True))
+        title_attr = clean_text(a_tag.get("title", ""))
+        
+        lower_text = text.lower()
+        lower_title = title_attr.lower()
+
+        # 双重校验：后缀命中，或者文字明示了格式
+        match = ATTACHMENT_SUFFIX_RE.search(full_url)
+        has_doc_text = any(ext in lower_text or ext in lower_title for ext in ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.csv', '.txt', '.zip', '.rar', '.7z'])
+
+        if (match or has_doc_text) and full_url not in seen_urls:
+            file_name = title_attr or text or href.split("/")[-1]
+            
+            if match:
+                file_type = match.group(1).lower()
+            elif "." in file_name:
+                file_type = file_name.split(".")[-1].lower()
+            else:
+                file_type = "unknown"
+
+            attachments.append({
+                "name": file_name,
+                "url": full_url,
+                "file_type": file_type,
+                "local_path": "",               
+                "download_status": "pending"    
+            })
+            seen_urls.add(full_url)
 
     return attachments
 
 
 def parse_detail_page(html: str, detail_url: str) -> dict:
     """解析详情页标题、日期、来源、正文和附件。"""
-    soup = BeautifulSoup(html, "lxml")
+    # 提取附件必须在 decompose(清理) 之前执行！因为我们会用到生肉 html 和未被清理的 soup
+    soup_for_extract = BeautifulSoup(html, "lxml")
+    attachments = _extract_attachments(html, soup_for_extract, detail_url)
 
-    for node in soup(["script", "style", "noscript"]):
+    # 正式处理正文：清理无用标签
+    soup = BeautifulSoup(html, "lxml")
+    for node in soup(["script", "style", "noscript", "iframe"]):
         node.decompose()
 
     body_node = _find_body_node(soup)
@@ -149,6 +195,6 @@ def parse_detail_page(html: str, detail_url: str) -> dict:
         "source_department": source_department,
         "body_text": body_text,
         "body_html": body_html,
-        "attachments": _extract_attachments(body_node or soup, detail_url),
-        "images": images  # 新增同步字段
+        "attachments": attachments,
+        "images": images  
     }

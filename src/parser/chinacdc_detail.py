@@ -4,13 +4,14 @@ from __future__ import annotations
 
 import re
 from urllib.parse import urljoin
-import hashlib  # 新增
+import hashlib
 
 from bs4 import BeautifulSoup
 
 from utils import clean_text, extract_date
 
-ATTACHMENT_SUFFIX_RE = re.compile(r"\.(pdf|doc|docx|xls|xlsx|zip)(?:$|\?)", re.IGNORECASE)
+# ATTACHMENT_SUFFIX_RE = re.compile(r"\.(pdf|doc|docx|xls|xlsx|zip)(?:$|\?)", re.IGNORECASE)
+ATTACHMENT_SUFFIX_RE = re.compile(r"\.(pdf|doc|docx|xls|xlsx|ppt|pptx|csv|txt|zip|rar|7z)(?:$|\?)", re.IGNORECASE)
 
 
 def _extract_title(soup: BeautifulSoup) -> str:
@@ -101,21 +102,56 @@ def parse_detail_page(html: str, detail_url: str) -> dict:
 
     publish_date, source_department = _extract_date_and_source(soup, page_text)
 
+    # ================= 附件提取逻辑 (增强版) =================
     attachments = []
     seen_urls = set()
-    for a_tag in body_node.find_all("a", href=True):
+    
+    # 核心改动1：直接扫描整个 soup，防止附件掉出正文容器外
+    for a_tag in soup.find_all("a", href=True):
         href = a_tag.get("href", "").strip()
+        
+        # 排除空链接或 JS 占位符
+        if not href or href.startswith("javascript:") or href == "#":
+            continue
+
         full_url = urljoin(detail_url, href)
+        
+        # 获取标签的文本和 title 属性
+        text = clean_text(a_tag.get_text(" ", strip=True))
+        title_attr = clean_text(a_tag.get("title", ""))
+        
+        lower_text = text.lower()
+        lower_title = title_attr.lower()
+
+        # 条件 1：URL 符合文件后缀正则
         match = ATTACHMENT_SUFFIX_RE.search(full_url)
-        if match and full_url not in seen_urls:
+        # 条件 2：链接文字或 title 属性中明确包含了文件后缀 (应对隐藏真实 URL 的下载链接)
+        # has_doc_text = any(ext in lower_text or ext in lower_title for ext in ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.zip', '.rar'])
+        has_doc_text = any(ext in lower_text or ext in lower_title for ext in ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.csv', '.txt', '.zip', '.rar', '.7z'])
+
+        # 只要满足任一条件，并且没被抓取过
+        if (match or has_doc_text) and full_url not in seen_urls:
+            
+            # 核心改动2：优先使用 title 属性作为文件名，最准确
+            file_name = title_attr or text or href.split("/")[-1]
+            
+            # 推断文件类型
+            if match:
+                file_type = match.group(1).lower()
+            elif "." in file_name:
+                file_type = file_name.split(".")[-1].lower()
+            else:
+                file_type = "unknown"
+
             attachments.append({
-                "name": clean_text(a_tag.get_text(" ", strip=True)) or href.split("/")[-1],
+                "name": file_name,
                 "url": full_url,
-                "file_type": match.group(1).lower(),
-                "local_path": "",               # 新增同步字段
-                "download_status": "pending"    # 新增同步字段
+                "file_type": file_type,
+                "local_path": "",               
+                "download_status": "pending"    
             })
             seen_urls.add(full_url)
+    # ==================================================================
 
     return {
         "title": _extract_title(soup),
@@ -124,5 +160,5 @@ def parse_detail_page(html: str, detail_url: str) -> dict:
         "body_text": body_text,
         "body_html": body_html,
         "attachments": attachments,
-        "images": images  # 新增同步字段
+        "images": images  
     }

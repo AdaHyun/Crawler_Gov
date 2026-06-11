@@ -141,8 +141,10 @@ def run() -> None:
         # 动态指定当前站点的输出文件路径
         output_path = OUTPUT_DIR / f"{parser_type}_all_documents.jsonl"
         
-        # --- 读取已有文件中的 id 和 url 进行去重 ---
+        # --- 读取已有文件中的 id 和 url 进行去重，并清洗未完整下载的记录 ---
         existing_keys = set()
+        valid_records = []  # 用于暂存完全成功的数据
+        
         if output_path.exists():
             with open(output_path, "r", encoding="utf-8") as f:
                 for line in f:
@@ -150,12 +152,35 @@ def run() -> None:
                         continue
                     try:
                         data = json.loads(line)
-                        if "doc_id" in data and data["doc_id"]:
-                            existing_keys.add(data["doc_id"])
-                        if "url" in data and data["url"]:
-                            existing_keys.add(data["url"])
+                        doc_id = data.get("doc_id")
+                        url = data.get("url")
+                        
+                        # 检查附件和图片状态
+                        attachments = data.get("attachments", [])
+                        images = data.get("images", [])
+                        
+                        # 判断是否有明确标记为 failed 或 pending 的
+                        has_failed = False
+                        for att in attachments:
+                            if isinstance(att, dict) and att.get("download_status") in ["failed", "pending"]:
+                                has_failed = True
+                                break
+                        for img in images:
+                            if isinstance(img, dict) and img.get("download_status") in ["failed", "pending"]:
+                                has_failed = True
+                                break
+                                
+                        # 只有全成功的才算真正 exist，保留在文件里
+                        if not has_failed:
+                            if doc_id: existing_keys.add(doc_id)
+                            if url: existing_keys.add(url)
+                            valid_records.append(line) 
                     except json.JSONDecodeError:
                         pass
+            
+            # 将剔除了失败记录的干净数据重新写回文件，防止重爬时产生重复数据
+            with open(output_path, "w", encoding="utf-8") as f:
+                f.writelines(valid_records)
         
 
         # 3. 首页 warm-up (利用 fetch_html 自动访问首页过验证)
@@ -231,7 +256,8 @@ def run() -> None:
                     logger.info("数据已存在，跳过解析并保留原数据：%s", item.get("title"))
                     continue
 
-                if item["url"].lower().endswith(('.pdf', '.doc', '.docx', '.xls', '.xlsx', '.zip')):
+                clean_url = item["url"].lower().split('?')[0]
+                if clean_url.endswith(('.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.csv', '.txt', '.zip', '.rar', '.7z')):
                     logger.info("检测到直链文件，直接入库跳过解析：%s", item["url"])
                     if item.get("attachments"):
                         att = item["attachments"][0]  # 从列表页解析中获取提取好的附件信息
@@ -307,6 +333,7 @@ def run() -> None:
                             att["download_status"] = "success"
                         else:
                             att["download_status"] = "failed"
+                            logger.error("正文附件下载失败: %s, 目标链接: %s", safe_att_name, att["url"])
 
                     item["crawl"]["http_status"] = detail_status
                     item["crawl"]["raw_html_path"] = raw_path
