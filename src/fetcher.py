@@ -8,7 +8,11 @@ from __future__ import annotations
 
 import os
 import time
+import mimetypes
+import re
+from email.message import Message
 from typing import Tuple
+from urllib.parse import unquote, urlparse
 
 from DrissionPage import WebPage
 
@@ -60,7 +64,7 @@ def load_browser_cookie(config_cookie: str = "") -> str:
 def fetch_html(
     url: str,
     headers: dict | None = None,
-    referer: str = "https://www.nhc.gov.cn/",
+    referer: str = "",
     timeout: int = 20,
 ) -> Tuple[str, int]:
     """请求网页并返回 HTML 文本和 HTTP 状态码。"""
@@ -83,18 +87,122 @@ def fetch_html(
     return html, status_code
 
 
-def warmup_homepage(timeout: int = 20, browser_cookie: str = "") -> None:
+def warmup_homepage(site_url: str, timeout: int = 20, browser_cookie: str = "") -> None:
     """先访问官网首页。这会让浏览器自动跑通首页的 JS 挑战，
     拿到合法的动态 Cookie，后续爬列表页就不会被拦截了。"""
-    fetch_html("https://www.nhc.gov.cn/", timeout=timeout)
+    fetch_html(site_url, referer=site_url, timeout=timeout)
 
 
-def download_file(url: str, save_dir: str | Path, file_name: str, timeout: int = 30) -> bool:
+KNOWN_FILE_EXTENSIONS = {
+    "pdf", "doc", "docx", "docm", "xls", "xlsx", "xlsm", "ppt", "pptx", "pptm",
+    "wps", "et", "dps", "rtf", "csv", "txt", "zip", "rar", "7z",
+    "jpg", "jpeg", "png", "gif", "bmp", "webp", "tif", "tiff",
+}
+
+CONTENT_TYPE_EXTENSIONS = {
+    "application/pdf": "pdf",
+    "application/msword": "doc",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "docx",
+    "application/vnd.ms-excel": "xls",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "xlsx",
+    "application/vnd.ms-powerpoint": "ppt",
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation": "pptx",
+    "application/zip": "zip",
+    "application/x-zip-compressed": "zip",
+    "application/x-rar-compressed": "rar",
+    "application/x-7z-compressed": "7z",
+    "text/plain": "txt",
+    "text/csv": "csv",
+    "image/jpeg": "jpg",
+    "image/png": "png",
+    "image/gif": "gif",
+    "image/bmp": "bmp",
+    "image/webp": "webp",
+    "image/tiff": "tif",
+}
+
+
+def _known_suffix(path_or_name: str) -> str:
+    suffix = Path(path_or_name).suffix.lower().lstrip(".")
+    return suffix if suffix in KNOWN_FILE_EXTENSIONS else ""
+
+
+def _filename_from_content_disposition(header: str) -> str:
+    if not header:
+        return ""
+    message = Message()
+    message["content-disposition"] = header
+    filename = message.get_param("filename*", header="content-disposition")
+    if filename:
+        if isinstance(filename, tuple):
+            _, _, filename = filename
+        return unquote(str(filename)).strip().strip('"')
+    filename = message.get_param("filename", header="content-disposition")
+    return unquote(str(filename)).strip().strip('"') if filename else ""
+
+
+def _extension_from_content_type(content_type: str) -> str:
+    mime = (content_type or "").split(";", 1)[0].strip().lower()
+    if not mime:
+        return ""
+    if mime in CONTENT_TYPE_EXTENSIONS:
+        return CONTENT_TYPE_EXTENSIONS[mime]
+    guessed = (mimetypes.guess_extension(mime) or "").lstrip(".").lower()
+    return guessed if guessed in KNOWN_FILE_EXTENSIONS else ""
+
+
+def _extension_from_magic(data: bytes) -> str:
+    if data.startswith(b"%PDF"):
+        return "pdf"
+    if data.startswith(b"PK\x03\x04"):
+        return "zip"
+    if data.startswith(b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1"):
+        return "doc"
+    if data.startswith(b"\x89PNG\r\n\x1a\n"):
+        return "png"
+    if data.startswith(b"\xff\xd8\xff"):
+        return "jpg"
+    if data.startswith(b"GIF87a") or data.startswith(b"GIF89a"):
+        return "gif"
+    if data.startswith(b"Rar!\x1a\x07"):
+        return "rar"
+    if data.startswith(b"7z\xbc\xaf\x27\x1c"):
+        return "7z"
+    return ""
+
+
+def _build_download_file_name(url: str, requested_name: str, resp: requests.Response, first_chunk: bytes) -> str:
+    requested_name = requested_name or "download"
+    if _known_suffix(requested_name):
+        return requested_name
+
+    header_name = _filename_from_content_disposition(resp.headers.get("content-disposition", ""))
+    header_suffix = _known_suffix(header_name)
+    if header_suffix:
+        return f"{Path(requested_name).stem or Path(header_name).stem or 'download'}.{header_suffix}"
+
+    url_suffix = _known_suffix(unquote(urlparse(url).path))
+    if url_suffix:
+        return f"{Path(requested_name).stem or 'download'}.{url_suffix}"
+
+    content_type_suffix = _extension_from_content_type(resp.headers.get("content-type", ""))
+    if content_type_suffix:
+        return f"{Path(requested_name).stem or 'download'}.{content_type_suffix}"
+
+    magic_suffix = _extension_from_magic(first_chunk)
+    if magic_suffix:
+        return f"{Path(requested_name).stem or 'download'}.{magic_suffix}"
+
+    return requested_name
+
+
+def download_file(url: str, save_dir: str | Path, file_name: str, timeout: int = 30) -> bool | str:
     """带 WAF 穿透的二进制文件下载器 (兼容各版本 DrissionPage)。"""
-    save_path = Path(save_dir) / file_name
+    save_dir = Path(save_dir)
+    save_path = save_dir / file_name
     # 如果文件已经下载过了，直接跳过，支持断点续爬
     if save_path.exists():
-        return True 
+        return file_name
 
     # ======== 核心修复区：兼容不同版本 DrissionPage 的 Cookie 格式 ========
     try:
@@ -116,11 +224,20 @@ def download_file(url: str, save_dir: str | Path, file_name: str, timeout: int =
         # 使用 requests 流式下载大文件
         resp = requests.get(url, headers=headers, cookies=cookies_dict, stream=True, timeout=timeout)
         resp.raise_for_status()
-        
+
+        iterator = resp.iter_content(chunk_size=8192)
+        first_chunk = next(iterator, b"")
+        actual_file_name = _build_download_file_name(url, file_name, resp, first_chunk)
+        save_path = save_dir / actual_file_name
+        if save_path.exists():
+            return actual_file_name
+
         with open(save_path, 'wb') as f:
-            for chunk in resp.iter_content(chunk_size=8192):
+            if first_chunk:
+                f.write(first_chunk)
+            for chunk in iterator:
                 f.write(chunk)
-        return True
+        return actual_file_name
     except Exception as e:
         print(f"下载文件失败: {url}, 错误: {e}")
         return False

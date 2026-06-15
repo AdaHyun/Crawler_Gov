@@ -12,7 +12,7 @@ from utils import clean_text, extract_date
 import hashlib
 
 # ATTACHMENT_SUFFIX_RE = re.compile(r"\.(pdf|doc|docx|xls|xlsx|zip)(?:$|\?)", re.IGNORECASE)
-ATTACHMENT_SUFFIX_RE = re.compile(r"\.(pdf|doc|docx|xls|xlsx|ppt|pptx|csv|txt|zip|rar|7z)(?:$|\?)", re.IGNORECASE)
+ATTACHMENT_SUFFIX_RE = re.compile(r"\.(pdf|doc|docx|docm|xls|xlsx|xlsm|ppt|pptx|pptm|wps|et|dps|rtf|csv|txt|zip|rar|7z|jpg|jpeg|png|gif|bmp|webp|tif|tiff)(?:$|\?)", re.IGNORECASE)
 
 
 def _extract_title(soup: BeautifulSoup) -> str:
@@ -153,7 +153,7 @@ def parse_detail_page(html: str, detail_url: str) -> dict:
         # 匹配逻辑：URL 后缀命中，或者链接的文字内容明示了它是一个文档
         match = ATTACHMENT_SUFFIX_RE.search(full_url)
         # has_doc_text = any(ext in lower_text or ext in lower_title for ext in ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.zip', '.rar'])
-        has_doc_text = any(ext in lower_text or ext in lower_title for ext in ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.csv', '.txt', '.zip', '.rar', '.7z'])
+        has_doc_text = any(ext in lower_text or ext in lower_title for ext in ['.pdf', '.doc', '.docx', '.docm', '.xls', '.xlsx', '.xlsm', '.ppt', '.pptx', '.pptm', '.wps', '.et', '.dps', '.rtf', '.csv', '.txt', '.zip', '.rar', '.7z', '.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.tif', '.tiff'])
 
         if (match or has_doc_text) and full_url not in seen_urls:
             # 优先使用 title 属性命名

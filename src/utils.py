@@ -186,7 +186,8 @@ def build_empty_document(site_config: dict[str, Any], channel: dict[str, Any]) -
             "document_type": "",
             "policy_category": channel.get("default_policy_category", ""),
             "topic_tags": [],
-            "target_region": "全国"
+            "target_region": "全国",
+            "storage_categories": []
         },
         "dates": {
             "publish_date": "",

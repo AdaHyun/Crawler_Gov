@@ -11,7 +11,7 @@ from bs4 import BeautifulSoup
 from utils import clean_text, extract_date
 
 # ATTACHMENT_SUFFIX_RE = re.compile(r"\.(pdf|doc|docx|xls|xlsx|zip|rar)(?:$|\?)", re.IGNORECASE)
-ATTACHMENT_SUFFIX_RE = re.compile(r"\.(pdf|doc|docx|xls|xlsx|ppt|pptx|csv|txt|zip|rar|7z)(?:$|\?)", re.IGNORECASE)
+ATTACHMENT_SUFFIX_RE = re.compile(r"\.(pdf|doc|docx|docm|xls|xlsx|xlsm|ppt|pptx|pptm|wps|et|dps|rtf|csv|txt|zip|rar|7z|jpg|jpeg|png|gif|bmp|webp|tif|tiff)(?:$|\?)", re.IGNORECASE)
 
 
 def _extract_title(soup: BeautifulSoup) -> str:

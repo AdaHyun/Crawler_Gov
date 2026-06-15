@@ -92,7 +92,7 @@ def parse_list_page(html: str, channel: dict, site_config: dict) -> list[dict]:
         item["url"] = detail_url
         item["dates"]["publish_date"] = publish_date
         # item["crawl"]["crawl_status"] = "list_parsed"
-        if detail_url.lower().endswith(('.pdf', '.doc', '.docx', '.xls', '.xlsx', '.zip')):
+        if detail_url.lower().endswith(('.pdf', '.doc', '.docx', '.docm', '.xls', '.xlsx', '.xlsm', '.ppt', '.pptx', '.pptm', '.wps', '.et', '.dps', '.rtf', '.csv', '.txt', '.zip', '.rar', '.7z', '.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.tif', '.tiff')):
             item["attachments"].append({
                 "name": f"{title}.pdf" if detail_url.lower().endswith('.pdf') else title,
                 "url": detail_url,

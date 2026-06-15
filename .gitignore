@@ -17,6 +17,8 @@ env/
 # ignore all data subfolders/files by default
 /data/*
 /data1/
+/data2/
+/great1/
 
 # keep only data/output
 !/data/output/

@@ -17,6 +17,7 @@ from pathlib import Path
 from tqdm import tqdm
 
 from fetcher import WafChallengeError, fetch_html, load_browser_cookie, set_browser_cookie, download_file
+from storage_classifier import classify_storage, safe_path_part
 from utils import (
     LOG_DIR,
     OUTPUT_DIR,
@@ -38,6 +39,41 @@ from utils import (
 CONFIG_PATH = PROJECT_ROOT / "config" / "sites.json"
 LOG_PATH = LOG_DIR / "crawler.log"
 WAF_HELP_LOGGED = False
+
+
+def _append_known_extension(file_name: str, file_type: str) -> str:
+    """Append a parsed extension only when it is known."""
+    file_type = (file_type or "").strip().lower().lstrip(".")
+    if not file_type or file_type == "unknown":
+        return file_name
+    if file_name.lower().endswith(f".{file_type}"):
+        return file_name
+    return f"{file_name}.{file_type}"
+
+
+def _build_item_dirs(
+    site_name: str,
+    storage_categories: list[str],
+    article_title: str,
+    create_attachment_dir: bool = True,
+    create_image_dir: bool = True,
+) -> tuple[Path, Path]:
+    safe_site_name = safe_path_part(site_name)
+    safe_categories = [safe_path_part(category, "未分类") for category in storage_categories]
+    safe_article_title = safe_path_part(article_title, "未命名文章")
+
+    # 截断过长标题，防止 Windows 路径整体超限。
+    if len(safe_article_title) > 80:
+        safe_article_title = safe_article_title[:80] + "..."
+
+    category_path = Path(*safe_categories) if safe_categories else Path("未分类")
+    item_attachment_dir = ATTACHMENT_DIR / safe_site_name / category_path / safe_article_title
+    item_image_dir = IMAGE_DIR / safe_site_name / category_path / safe_article_title
+    if create_attachment_dir:
+        item_attachment_dir.mkdir(parents=True, exist_ok=True)
+    if create_image_dir:
+        item_image_dir.mkdir(parents=True, exist_ok=True)
+    return item_attachment_dir, item_image_dir
 
 
 def _update_item_from_detail(item: dict, detail: dict, channel: dict) -> None:
@@ -257,21 +293,35 @@ def run() -> None:
                     continue
 
                 clean_url = item["url"].lower().split('?')[0]
-                if clean_url.endswith(('.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.csv', '.txt', '.zip', '.rar', '.7z')):
+                if clean_url.endswith((
+                    '.pdf', '.doc', '.docx', '.docm', '.xls', '.xlsx', '.xlsm',
+                    '.ppt', '.pptx', '.pptm', '.wps', '.et', '.dps', '.rtf',
+                    '.csv', '.txt', '.zip', '.rar', '.7z',
+                    '.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.tif', '.tiff'
+                )):
+                    current_title = item.get("title", "未命名文章")
+                    storage_categories = classify_storage(site_name, channel_name, current_title)
+                    item["classification"]["storage_categories"] = storage_categories
+                    item_attachment_dir, _ = _build_item_dirs(
+                        site_name,
+                        storage_categories,
+                        current_title,
+                        create_image_dir=False,
+                    )
                     logger.info("检测到直链文件，直接入库跳过解析：%s", item["url"])
                     if item.get("attachments"):
                         att = item["attachments"][0]  # 从列表页解析中获取提取好的附件信息
 
                         safe_att_name = re.sub(r'[\\/:*?"<>|]', '_', att["name"])
-                        if not safe_att_name.lower().endswith(f".{att['file_type']}"):
-                            safe_att_name = f"{safe_att_name}.{att['file_type']}"
+                        safe_att_name = _append_known_extension(safe_att_name, att.get("file_type", ""))
 
                         logger.info("正在下载直链文件: %s", safe_att_name)
                         # 调用下载器，存入附件目录
-                        success = download_file(att["url"], ATTACHMENT_DIR, safe_att_name)
-                        if success:
+                        downloaded_name = download_file(att["url"], item_attachment_dir, safe_att_name)
+                        if downloaded_name:
+                            saved_att_name = downloaded_name if isinstance(downloaded_name, str) else safe_att_name
                             # att["local_path"] = f"data/attachments/{safe_att_name}"
-                            att["local_path"] = (ATTACHMENT_DIR / safe_att_name).relative_to(PROJECT_ROOT).as_posix()
+                            att["local_path"] = (item_attachment_dir / saved_att_name).relative_to(PROJECT_ROOT).as_posix()
                             att["download_status"] = "success"
                         else:
                             att["download_status"] = "failed"
@@ -302,8 +352,9 @@ def run() -> None:
                         safe_article_title = safe_article_title[:80] + "..."
 
                     # 自动创建三级专属文件夹
-                    item_attachment_dir = ATTACHMENT_DIR / safe_site_name / safe_channel_name / safe_article_title
-                    item_image_dir = IMAGE_DIR / safe_site_name / safe_channel_name / safe_article_title
+                    storage_categories = classify_storage(site_name, channel_name, current_title)
+                    item["classification"]["storage_categories"] = storage_categories
+                    item_attachment_dir, item_image_dir = _build_item_dirs(site_name, storage_categories, current_title)
                     item_attachment_dir.mkdir(parents=True, exist_ok=True)
                     item_image_dir.mkdir(parents=True, exist_ok=True)
 
@@ -311,10 +362,11 @@ def run() -> None:
                     for img_info in detail.get("images", []):
                         safe_img_name = re.sub(r'[\\/:*?"<>|]', '_', img_info["file_name"])
                         
-                        success = download_file(img_info["url"], item_image_dir, safe_img_name)
-                        if success:
+                        downloaded_name = download_file(img_info["url"], item_image_dir, safe_img_name)
+                        if downloaded_name:
+                            saved_img_name = downloaded_name if isinstance(downloaded_name, str) else safe_img_name
                             # img_info["local_path"] = f"data/images/{safe_site_name}/{safe_channel_name}/{safe_article_title}/{safe_img_name}"
-                            img_info["local_path"] = (item_image_dir / safe_img_name).relative_to(PROJECT_ROOT).as_posix()
+                            img_info["local_path"] = (item_image_dir / saved_img_name).relative_to(PROJECT_ROOT).as_posix()
                             img_info["download_status"] = "success"
                         else:
                             img_info["download_status"] = "failed"
@@ -322,14 +374,14 @@ def run() -> None:
                     # 2. 触发正文附件下载
                     for att in detail.get("attachments", []):
                         safe_att_name = re.sub(r'[\\/:*?"<>|]', '_', att["name"])
-                        if not safe_att_name.lower().endswith(f".{att['file_type']}"):
-                            safe_att_name = f"{safe_att_name}.{att['file_type']}"
+                        safe_att_name = _append_known_extension(safe_att_name, att.get("file_type", ""))
                         
                         logger.info("正在下载正文附件: %s", safe_att_name)
-                        success = download_file(att["url"], item_attachment_dir, safe_att_name)
-                        if success:
+                        downloaded_name = download_file(att["url"], item_attachment_dir, safe_att_name)
+                        if downloaded_name:
+                            saved_att_name = downloaded_name if isinstance(downloaded_name, str) else safe_att_name
                             # att["local_path"] = f"data/attachments/{safe_site_name}/{safe_channel_name}/{safe_article_title}/{safe_att_name}"
-                            att["local_path"] = (item_attachment_dir / safe_att_name).relative_to(PROJECT_ROOT).as_posix()
+                            att["local_path"] = (item_attachment_dir / saved_att_name).relative_to(PROJECT_ROOT).as_posix()
                             att["download_status"] = "success"
                         else:
                             att["download_status"] = "failed"
