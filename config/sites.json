@@ -65,13 +65,13 @@
       },
       {
         "channel_name": "政策解读",
-        "channel_url": "https://www.ndcpa.gov.cn/jbkzzx/c100013/common/list.html", 
+        "channel_url": "https://www.ndcpa.gov.cn/jbkzzx/c100013/common/list.html",
         "default_policy_category": "政策解读",
         "enabled": false
       },
       {
         "channel_name": "疫情信息",
-        "channel_url": "https://www.ndcpa.gov.cn/jbkzzx/c100016/second/list.html", 
+        "channel_url": "https://www.ndcpa.gov.cn/jbkzzx/c100016/second/list.html",
         "default_policy_category": "疫情信息",
         "enabled": false
       },
@@ -217,7 +217,7 @@
     "site_url": "https://ncncd.chinacdc.cn/",
     "policy_level": "国家级",
     "crawler_name": "ncncd_crawler_v1",
-    "parser_type": "ncncd",  
+    "parser_type": "ncncd",
     "max_pages": 100,
     "request": {
       "timeout": 20
@@ -227,7 +227,7 @@
         "channel_name": "监测与数据",
         "channel_url": "https://ncncd.chinacdc.cn/jcysj/",
         "default_policy_category": "统计数据",
-        "enabled": false 
+        "enabled": false
       },
       {
         "channel_name": "健康生活方式",
@@ -264,13 +264,20 @@
     "parser": "who_publications",
     "source": "WHO",
     "channel_name": "Publications",
-    "channel_url": "https://www.who.int/publications",
+    "channel_url": "https://www.who.int/publications/i",
     "data_source_type": "webpage",
     "language": "en",
     "max_pages": 2,
+    "resume": true,
+    "skip_existing": true,
+    "overwrite_existing": false,
+    "save_checkpoint": true,
+    "checkpoint_file": "data/checkpoints/who_publications_checkpoint.json",
+    "checkpoint_interval": 1,
     "download_attachments": true,
     "resolve_iris_final_file": true,
     "use_head_for_attachments": true,
+    "crawl_language_versions": true,
     "attachment_save": {
       "base_dir": "data/attachments/who/publications",
       "group_by": "classification.document_type",
@@ -283,7 +290,8 @@
     },
     "request": {
       "timeout": 20
-    }
+    },
+    "max_records": null
   },
   {
     "enabled": false,
@@ -303,12 +311,25 @@
     "use_head_for_attachments": false,
     "attachment_save": {
       "base_dir": "data/attachments/who/disease_outbreak_news",
-      "group_by": "geo.country",
+      "group_by": "classification.document_type",
       "unknown_folder": "unknown"
     },
     "request": {
       "timeout": 20
-    }
+    },
+    "resume": true,
+    "skip_existing": true,
+    "overwrite_existing": false,
+    "save_checkpoint": true,
+    "checkpoint_file": "data/checkpoints/who_disease_outbreak_news_checkpoint.json",
+    "checkpoint_interval": 1,
+    "crawl_language_versions": false,
+    "image_save": {
+      "base_dir": "data/images/who/disease_outbreak_news",
+      "group_by": "classification.document_type",
+      "unknown_folder": "unknown"
+    },
+    "max_records": null
   },
   {
     "enabled": false,
@@ -328,12 +349,25 @@
     "use_head_for_attachments": false,
     "attachment_save": {
       "base_dir": "data/attachments/who/fact_sheets",
-      "group_by": "geo.country",
+      "group_by": "classification.document_type",
       "unknown_folder": "unknown"
     },
     "request": {
       "timeout": 20
-    }
+    },
+    "resume": true,
+    "skip_existing": true,
+    "overwrite_existing": false,
+    "save_checkpoint": true,
+    "checkpoint_file": "data/checkpoints/who_fact_sheets_checkpoint.json",
+    "checkpoint_interval": 1,
+    "crawl_language_versions": false,
+    "image_save": {
+      "base_dir": "data/images/who/fact_sheets",
+      "group_by": "classification.document_type",
+      "unknown_folder": "unknown"
+    },
+    "max_records": null
   },
   {
     "enabled": false,
@@ -353,12 +387,25 @@
     "use_head_for_attachments": false,
     "attachment_save": {
       "base_dir": "data/attachments/who/health_topics",
-      "group_by": "geo.country",
+      "group_by": "classification.document_type",
       "unknown_folder": "unknown"
     },
     "request": {
       "timeout": 20
-    }
+    },
+    "resume": true,
+    "skip_existing": true,
+    "overwrite_existing": false,
+    "save_checkpoint": true,
+    "checkpoint_file": "data/checkpoints/who_health_topics_checkpoint.json",
+    "checkpoint_interval": 1,
+    "crawl_language_versions": false,
+    "image_save": {
+      "base_dir": "data/images/who/health_topics",
+      "group_by": "classification.document_type",
+      "unknown_folder": "unknown"
+    },
+    "max_records": null
   },
   {
     "enabled": false,
@@ -372,6 +419,27 @@
     "channel_url": "https://www.who.int/data/gho",
     "data_source_type": "api",
     "language": "en",
-    "max_records": 100
+    "max_records": 100,
+    "resume": true,
+    "skip_existing": true,
+    "overwrite_existing": false,
+    "save_checkpoint": true,
+    "checkpoint_file": "data/checkpoints/who_gho_api_checkpoint.json",
+    "checkpoint_interval": 1,
+    "download_attachments": false,
+    "resolve_iris_final_file": false,
+    "use_head_for_attachments": false,
+    "crawl_language_versions": false,
+    "attachment_save": {
+      "base_dir": "data/attachments/who/gho",
+      "group_by": "classification.document_type",
+      "unknown_folder": "unknown"
+    },
+    "image_save": {
+      "base_dir": "data/images/who/gho",
+      "group_by": "classification.document_type",
+      "unknown_folder": "unknown"
+    },
+    "max_pages": 1
   }
 ]

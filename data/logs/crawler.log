@@ -3224,3 +3224,33 @@
 2026-06-15 17:08:48 [INFO] [WHO Publications] page 1 parsed 3 items
 2026-06-15 17:08:54 [INFO] [WHO Publications] page 2 parsed 3 items
 2026-06-15 17:08:54 [INFO] [who_publications] Finished. success=3 failed=0 skipped=0 output=D:\LZH\A-Project\Crawler311\who_crawler\Crawler_Gov\data\output\who\who_publications.jsonl
+2026-06-16 09:48:17 [INFO] ============== 成功加载 [国家卫生健康委员会] 解析器 ==============
+2026-06-16 09:48:29 [INFO] [国家卫生健康委员会] 首页 WAF 响应已保存：data/raw_html/nhc_gov_cn_homepage_waf_error_20260616_0001.html
+2026-06-16 09:48:29 [ERROR] 检测到站点返回 WAF/JS 校验页。如果是纯 requests 爬虫，不执行 JavaScript，因此无法自动通过该校验。
+2026-06-16 09:48:29 [ERROR] 请设置正确的 Cookie，或使用 DrissionPage 浏览器内核绕过。
+2026-06-16 09:48:29 [INFO] [国家卫生健康委员会] 暂未开启任何栏目抓取
+2026-06-16 09:48:29 [INFO] ============== 成功加载 [国家疾病预防控制局] 解析器 ==============
+2026-06-16 09:48:31 [INFO] [国家疾病预防控制局] 首页 warm-up 成功，已建立 Session/Cookie
+2026-06-16 09:48:31 [INFO] [国家疾病预防控制局] 暂未开启任何栏目抓取
+2026-06-16 09:48:31 [INFO] ============== 成功加载 [中国疾病预防控制中心] 解析器 ==============
+2026-06-16 09:48:34 [INFO] [中国疾病预防控制中心] 首页 warm-up 成功，已建立 Session/Cookie
+2026-06-16 09:48:34 [INFO] [中国疾病预防控制中心] 暂未开启任何栏目抓取
+2026-06-16 09:48:34 [INFO] ============== 成功加载 [中国疾控中心慢病中心] 解析器 ==============
+2026-06-16 09:48:36 [INFO] [中国疾控中心慢病中心] 首页 warm-up 成功，已建立 Session/Cookie
+2026-06-16 09:48:36 [INFO] [中国疾控中心慢病中心] 暂未开启任何栏目抓取
+2026-06-16 09:53:43 [INFO] ============== 成功加载 [国家卫生健康委员会] 解析器 ==============
+2026-06-16 09:53:56 [INFO] [国家卫生健康委员会] 首页 warm-up 成功，已建立 Session/Cookie
+2026-06-16 09:53:56 [INFO] [国家卫生健康委员会] 暂未开启任何栏目抓取
+2026-06-16 09:53:56 [INFO] ============== 成功加载 [国家疾病预防控制局] 解析器 ==============
+2026-06-16 09:53:58 [INFO] [国家疾病预防控制局] 首页 warm-up 成功，已建立 Session/Cookie
+2026-06-16 09:53:58 [INFO] [国家疾病预防控制局] 暂未开启任何栏目抓取
+2026-06-16 09:53:58 [INFO] ============== 成功加载 [中国疾病预防控制中心] 解析器 ==============
+2026-06-16 09:54:01 [INFO] [中国疾病预防控制中心] 首页 warm-up 成功，已建立 Session/Cookie
+2026-06-16 09:54:01 [INFO] [中国疾病预防控制中心] 暂未开启任何栏目抓取
+2026-06-16 09:54:01 [INFO] ============== 成功加载 [中国疾控中心慢病中心] 解析器 ==============
+2026-06-16 09:54:03 [INFO] [中国疾控中心慢病中心] 首页 warm-up 成功，已建立 Session/Cookie
+2026-06-16 09:54:03 [INFO] [中国疾控中心慢病中心] 暂未开启任何栏目抓取
+2026-06-16 09:55:07 [INFO] Skip disabled site/source: World Health Organization
+2026-06-16 09:55:07 [INFO] Skip disabled site/source: World Health Organization
+2026-06-16 09:55:07 [INFO] Skip disabled site/source: World Health Organization
+2026-06-16 09:55:07 [INFO] Skip disabled site/source: World Health Organization

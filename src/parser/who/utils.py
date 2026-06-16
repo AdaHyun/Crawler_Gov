@@ -117,6 +117,15 @@ def normalize_publish_date(publish_date: str) -> str:
     return "unknown-date"
 
 
+def extract_publish_year(publish_date: str) -> str:
+    """Extract a four-digit year from WHO date text."""
+    date_code = normalize_publish_date(publish_date)
+    if re.match(r"^\d{8}$", date_code):
+        return date_code[:4]
+    match = re.search(r"(20\d{2}|19\d{2})", publish_date or "")
+    return match.group(1) if match else ""
+
+
 def generate_doc_id(
     url: str,
     publish_date: str,
@@ -144,6 +153,8 @@ def generate_doc_id(
         and existing.get("category_code") == category_code
         and re.match(rf"^{re.escape(prefix)}-\d{{4}}$", existing.get("doc_id", ""))
     ):
+        existing["title"] = (record or {}).get("title", "") or existing.get("title", "")
+        existing["article_title"] = existing["title"]
         return existing["doc_id"], url_hash
 
     used_ids = {entry.get("doc_id") for entry in registry.values() if isinstance(entry, dict)}
@@ -176,6 +187,8 @@ def generate_doc_id(
         "canonical_url": canonical_url,
         "url_hash": url_hash,
         "doc_id": doc_id,
+        "title": (record or {}).get("title", ""),
+        "article_title": (record or {}).get("title", ""),
         "source_code": source_code,
         "channel_code": channel_code,
         "category_code": category_code,
@@ -226,12 +239,19 @@ def _last_non_empty(value: Any) -> str:
     return str(value or "").strip()
 
 
-def save_raw_html(html: str, doc_id: str, channel_code: str = "publications") -> str:
+def save_raw_html(
+    html: str,
+    doc_id: str,
+    channel_code: str = "publications",
+    suffix: str = "",
+) -> str:
     """Save WHO raw HTML below data/raw_html/who/{channel_code}/."""
     safe_doc_id = safe_filename(doc_id)
+    safe_suffix = safe_filename(suffix) if suffix else ""
     target_dir = PROJECT_ROOT / "data" / "raw_html" / "who" / safe_filename(channel_code.lower())
     target_dir.mkdir(parents=True, exist_ok=True)
-    file_path = target_dir / f"{safe_doc_id}.html"
+    file_stem = f"{safe_doc_id}_{safe_suffix}" if safe_suffix else safe_doc_id
+    file_path = target_dir / f"{file_stem}.html"
     file_path.write_text(html or "", encoding="utf-8")
     return file_path.relative_to(PROJECT_ROOT).as_posix()
 
@@ -575,6 +595,10 @@ def build_group_folder_name(
     unknown_folder = save_config.get("unknown_folder", "unknown")
     group_value = get_nested_value(record, save_config.get("group_by", ""))
     folder_name = normalize_group_value(group_value, unknown_folder)
+    if folder_name == clean_category_code(unknown_folder):
+        folder_name = get_record_category_code(record, site_config)
+    if not folder_name or folder_name == "unknown":
+        folder_name = clean_category_code(unknown_folder)
     return safe_filename(folder_name.lower(), max_length=80) or unknown_folder
 
 

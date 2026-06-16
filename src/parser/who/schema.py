@@ -54,6 +54,7 @@ def build_who_base_record(site_config: dict[str, Any] | None = None) -> dict[str
         },
         "dates": {
             "publish_date": "",
+            "publish_year": "",
             "crawl_date": now_date,
             "last_updated": "",
             "data_reference_year": "",
@@ -71,8 +72,21 @@ def build_who_base_record(site_config: dict[str, Any] | None = None) -> dict[str
             "language_code": site_config.get("language", "en"),
             "language_name": "English",
             "is_translation": False,
-            "original_language": "",
-            "available_languages": [],
+            "original_language": "English",
+            "available_languages": ["English"],
+            "language_versions": [],
+        },
+        "publication_details": {
+            "who_team": [],
+            "editors": [],
+            "number_of_pages": "",
+            "reference_numbers": {
+                "isbn": [],
+                "issn": [],
+                "other": [],
+            },
+            "copyright": "",
+            "license_url": "",
         },
         "geo": {
             "who_region": "",

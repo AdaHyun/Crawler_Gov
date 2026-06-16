@@ -116,6 +116,15 @@ def _run_registered_parser(site_config: dict, parser_name: str, logger) -> None:
     total_failed = 0
     total_skipped = 0
     for record in records:
+        already_saved = record.pop("_already_saved", False)
+        if already_saved:
+            if record.get("crawl", {}).get("crawl_status") == "success":
+                total_success += 1
+            else:
+                total_failed += 1
+            existing_keys.add(record.get("doc_id", ""))
+            existing_keys.add(record.get("url", ""))
+            continue
         if record.get("doc_id") in existing_keys or record.get("url") in existing_keys:
             total_skipped += 1
             continue
