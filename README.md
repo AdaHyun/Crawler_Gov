@@ -343,3 +343,55 @@ data/raw_html/
 - 国家卫生健康委员会：3187 条
 
 总计：**3863 条公共卫生相关文档数据**。
+
+# WHO 数据源扩展
+
+当前项目已在原有国内机构爬虫框架上增量加入 WHO 数据源。第一阶段已实现：
+
+- WHO Publications：`src/parser/who/publications.py`
+- WHO 统一 schema：`src/parser/who/schema.py`
+- WHO 通用工具：`src/parser/who/utils.py`
+- WHO 输出文件：`data/output/who/who_publications.jsonl`
+- WHO 原始 HTML：`data/raw_html/who/publications/`
+- WHO doc_id registry：`data/id_registry/who_doc_id_registry.json`
+
+WHO 运行方式：
+
+```powershell
+cd ...\Crawler_Gov
+python src\main.py
+```
+
+WHO 的 `doc_id` 使用短格式，并包含来源、入口、分类、发布日期和顺序号：
+
+```text
+WHO-PUB-report-20260612-01-0001
+WHO-PUB-guideline-20260612-01-0001
+WHO-PUB-unknown-unknown-date-01-0001
+```
+
+其中 `category_code` 从记录中的 `classification.document_type`、`who_metadata.publication_type`、`classification.policy_category`、健康主题、主题标签或存储分类中自动推断；推断不到时使用 `unknown`。
+
+WHO 附件支持 IRIS bitstream / content 链接识别、HEAD/GET 响应头解析、`Content-Disposition` 文件名解析、文件类型推断和规范化本地命名。本地附件文件名格式为：
+
+```text
+{doc_id}-att{index}-{original_filename}
+```
+
+例如：
+
+```text
+data/attachments/who/publications/unknown/WHO-PUB-report-20260612-01-0001-att01-9789240121546-eng.pdf
+```
+
+附件统计脚本 `scripts/export_attachment_stats.py` 已兼容 WHO 输出，并会在生成的 Excel 中增加 WHO 相关分表：
+
+- `WHO栏目汇总`
+- `WHO文章明细`
+
+后续 WHO 入口可继续按现有结构扩展：
+
+- Disease Outbreak News：`src/parser/who/disease_outbreak_news.py`
+- Fact sheets：`src/parser/who/fact_sheets.py`
+- Health topics：`src/parser/who/health_topics.py`
+- GHO API：`src/parser/who/gho_api.py`

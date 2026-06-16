@@ -9,6 +9,8 @@ from __future__ import annotations
 
 import re
 import importlib
+import logging
+import os
 import random
 import time
 import json
@@ -17,6 +19,7 @@ from pathlib import Path
 from tqdm import tqdm
 
 from fetcher import WafChallengeError, fetch_html, load_browser_cookie, set_browser_cookie, download_file
+from parser.who.publications import parse_who_publications
 from utils import (
     LOG_DIR,
     OUTPUT_DIR,
@@ -37,7 +40,101 @@ from utils import (
 
 CONFIG_PATH = PROJECT_ROOT / "config" / "sites.json"
 LOG_PATH = LOG_DIR / "crawler.log"
+WHO_LOG_PATH = PROJECT_ROOT / "data" / "log" / "who_crawler.log"
 WAF_HELP_LOGGED = False
+PARSER_MAP = {
+    "who_publications": parse_who_publications,
+}
+
+
+def setup_who_logger() -> logging.Logger:
+    """Create a separate WHO crawl logger under data/log/."""
+    WHO_LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
+    logger = logging.getLogger("who_crawler")
+    logger.setLevel(logging.INFO)
+    logger.handlers.clear()
+
+    formatter = logging.Formatter(
+        "%(asctime)s [%(levelname)s] %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
+    file_handler = logging.FileHandler(WHO_LOG_PATH, encoding="utf-8")
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
+
+    stream_handler = logging.StreamHandler()
+    stream_handler.setFormatter(formatter)
+    logger.addHandler(stream_handler)
+    return logger
+
+
+def _matches_run_filter(site_config: dict, run_only: str) -> bool:
+    """Return True when the source matches the optional CRAWLER_ONLY filter."""
+    if not run_only:
+        return True
+    candidates = {
+        site_config.get("parser", ""),
+        site_config.get("parser_type", ""),
+        site_config.get("crawler_name", ""),
+        site_config.get("site_domain", ""),
+        site_config.get("site_name", ""),
+    }
+    return run_only in candidates
+
+
+def _load_existing_keys(output_path: Path) -> set[str]:
+    """Load existing doc_id and URL values for resumable JSONL output."""
+    existing_keys: set[str] = set()
+    if not output_path.exists():
+        return existing_keys
+    with output_path.open("r", encoding="utf-8") as f:
+        for line in f:
+            if not line.strip():
+                continue
+            try:
+                data = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if data.get("doc_id"):
+                existing_keys.add(data["doc_id"])
+            if data.get("url"):
+                existing_keys.add(data["url"])
+    return existing_keys
+
+
+def _run_registered_parser(site_config: dict, parser_name: str, logger) -> None:
+    """Run a parser registered in PARSER_MAP and save its records."""
+    parser_func = PARSER_MAP[parser_name]
+    output_dir = OUTPUT_DIR / "who" if parser_name.startswith("who_") else OUTPUT_DIR
+    output_path = output_dir / f"{parser_name}.jsonl"
+    existing_keys = _load_existing_keys(output_path)
+
+    logger.info("============== Loaded registered parser [%s] ==============", parser_name)
+    records = parser_func(site_config, fetch_html=fetch_html, logger=logger)
+
+    total_success = 0
+    total_failed = 0
+    total_skipped = 0
+    for record in records:
+        if record.get("doc_id") in existing_keys or record.get("url") in existing_keys:
+            total_skipped += 1
+            continue
+        append_jsonl(record, output_path)
+        existing_keys.add(record.get("doc_id", ""))
+        existing_keys.add(record.get("url", ""))
+        if record.get("crawl", {}).get("crawl_status") == "success":
+            total_success += 1
+        else:
+            total_failed += 1
+
+    logger.info(
+        "[%s] Finished. success=%s failed=%s skipped=%s output=%s",
+        parser_name,
+        total_success,
+        total_failed,
+        total_skipped,
+        output_path,
+    )
 
 
 def _update_item_from_detail(item: dict, detail: dict, channel: dict) -> None:
@@ -105,9 +202,22 @@ def run() -> None:
     sites_configs = load_json(CONFIG_PATH)
     if isinstance(sites_configs, dict):
         sites_configs = [sites_configs]  # 兼容以前的单字典格式
+    run_only = os.getenv("CRAWLER_ONLY", "").strip()
 
     for site_config in sites_configs:
         site_name = site_config.get("site_name", "未知站点")
+        if not _matches_run_filter(site_config, run_only):
+            continue
+        if not site_config.get("enabled", True):
+            logger.info("Skip disabled site/source: %s", site_name)
+            continue
+
+        configured_parser = site_config.get("parser", "")
+        if configured_parser in PARSER_MAP:
+            parser_logger = setup_who_logger() if configured_parser.startswith("who_") else logger
+            _run_registered_parser(site_config, configured_parser, parser_logger)
+            continue
+
         parser_type = site_config.get("parser_type", "nhc")
         
         # 1. 尝试动态加载当前站点的解析规则模块

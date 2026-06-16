@@ -10,13 +10,17 @@ import os
 import time
 from typing import Tuple
 
-from DrissionPage import WebPage
+try:
+    from DrissionPage import WebPage
+except ModuleNotFoundError:
+    WebPage = None
 
 import requests
 from pathlib import Path
 
 # 初始化浏览器对象，默认会自动寻找系统自带的 Chrome 或 Edge 内核
-PAGE = WebPage()
+PAGE = WebPage() if WebPage is not None else None
+SESSION = requests.Session()
 
 
 class MockResponse:
@@ -65,6 +69,29 @@ def fetch_html(
 ) -> Tuple[str, int]:
     """请求网页并返回 HTML 文本和 HTTP 状态码。"""
 
+    if PAGE is None:
+        request_headers = {
+            "User-Agent": (
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0 Safari/537.36"
+            ),
+            "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
+            "Referer": referer,
+        }
+        if headers:
+            request_headers.update(headers)
+        response = SESSION.get(url, headers=request_headers, timeout=timeout)
+        if response.encoding is None:
+            response.encoding = response.apparent_encoding
+        if response.status_code == 412 or _looks_like_waf_challenge(response.text):
+            raise WafChallengeError(
+                f"{response.status_code} WAF/JS challenge for url: {url}",
+                html=response.text,
+                status=response.status_code,
+            )
+        response.raise_for_status()
+        return response.text, response.status_code
+
     # 让真实的浏览器访问目标 URL
     PAGE.get(url, timeout=timeout)
     
@@ -97,10 +124,13 @@ def download_file(url: str, save_dir: str | Path, file_name: str, timeout: int =
         return True 
 
     # ======== 核心修复区：兼容不同版本 DrissionPage 的 Cookie 格式 ========
-    try:
-        raw_cookies = PAGE.cookies()
-    except Exception:
-        raw_cookies = PAGE.get_cookies() if hasattr(PAGE, 'get_cookies') else {}
+    if PAGE is None:
+        raw_cookies = {}
+    else:
+        try:
+            raw_cookies = PAGE.cookies()
+        except Exception:
+            raw_cookies = PAGE.get_cookies() if hasattr(PAGE, 'get_cookies') else {}
 
     # 将获取到的原始 cookie 统一转换为 requests 能认的 dict 格式
     cookies_dict = {}
@@ -110,7 +140,12 @@ def download_file(url: str, save_dir: str | Path, file_name: str, timeout: int =
         cookies_dict = {str(c.get("name", "")): str(c.get("value", "")) for c in raw_cookies if "name" in c}
     # ======================================================================
 
-    headers = {"User-Agent": str(PAGE.user_agent)}
+    headers = {
+        "User-Agent": str(PAGE.user_agent) if PAGE is not None else (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0 Safari/537.36"
+        )
+    }
     
     try:
         # 使用 requests 流式下载大文件

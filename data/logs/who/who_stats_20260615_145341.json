@@ -1,0 +1,48 @@
+{
+  "generated_at": "2026-06-15 14:53:41",
+  "source_dir": "data\\output\\who",
+  "files": {
+    "who_publications.jsonl": {
+      "records": 3,
+      "attachments": 3,
+      "images": 15,
+      "parse_errors": 0,
+      "site_name": {
+        "World Health Organization": 3
+      },
+      "channel_name": {
+        "Publications": 3
+      },
+      "data_source_type": {
+        "webpage": 3
+      },
+      "document_type": {
+        "report download": 3
+      },
+      "topic_tags": {},
+      "health_topics": {},
+      "publish_date": {
+        "12 June 2026": 1,
+        "11 June 2026": 2
+      },
+      "crawl_date": {
+        "2026-06-15": 3
+      },
+      "language_code": {
+        "en": 3
+      },
+      "coverage_level": {
+        "": 3
+      },
+      "crawl_status": {
+        "success": 3
+      }
+    }
+  },
+  "totals": {
+    "records": 3,
+    "attachments": 3,
+    "images": 15,
+    "parse_errors": 0
+  }
+}

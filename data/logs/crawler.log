@@ -3165,3 +3165,62 @@
 2026-06-11 04:40:13 [INFO] 栏目 [老年健康] 当前页未解析到任何数据，自动判断已达最后一页，停止翻页！
 2026-06-11 04:40:16 [INFO] [中国疾控中心慢病中心] 爬取完毕！成功 24 条，失败 0 条，数据保存至：D:\LZH\A-Project\Crawler311\nhc_crawler\data\output\ncncd_all_documents.jsonl
 
+2026-06-15 14:52:12 [INFO] ============== Loaded registered parser [who_publications] ==============
+2026-06-15 14:52:15 [INFO] [WHO Publications] page 1 parsed 3 items
+2026-06-15 14:52:24 [INFO] [WHO Publications] page 2 parsed 3 items
+2026-06-15 14:52:24 [INFO] [who_publications] Finished. success=3 failed=0 skipped=0 output=D:\LZH\A-Project\Crawler311\who_crawler\Crawler_Gov\data\output\who\who_publications.jsonl
+2026-06-15 14:53:19 [INFO] ============== Loaded registered parser [who_publications] ==============
+2026-06-15 14:53:22 [INFO] [WHO Publications] page 1 parsed 3 items
+2026-06-15 14:53:29 [INFO] [WHO Publications] page 2 parsed 3 items
+2026-06-15 14:53:29 [INFO] [who_publications] Finished. success=3 failed=0 skipped=0 output=D:\LZH\A-Project\Crawler311\who_crawler\Crawler_Gov\data\output\who\who_publications.jsonl
+2026-06-15 16:15:32 [INFO] ============== Loaded registered parser [who_publications] ==============
+2026-06-15 16:15:35 [INFO] [WHO Publications] page 1 parsed 3 items
+2026-06-15 16:15:52 [INFO] [WHO Publications] page 2 parsed 3 items
+2026-06-15 16:15:52 [INFO] [who_publications] Finished. success=3 failed=0 skipped=0 output=D:\LZH\A-Project\Crawler311\who_crawler\Crawler_Gov\data\output\who\who_publications.jsonl
+2026-06-15 16:16:36 [INFO] ============== Loaded registered parser [who_publications] ==============
+2026-06-15 16:16:38 [INFO] [WHO Publications] page 1 parsed 3 items
+2026-06-15 16:16:52 [INFO] [WHO Publications] page 2 parsed 3 items
+2026-06-15 16:16:52 [INFO] [who_publications] Finished. success=3 failed=0 skipped=0 output=D:\LZH\A-Project\Crawler311\who_crawler\Crawler_Gov\data\output\who\who_publications.jsonl
+2026-06-15 16:20:44 [INFO] ============== 成功加载 [国家卫生健康委员会] 解析器 ==============
+2026-06-15 16:20:48 [INFO] [国家卫生健康委员会] 首页 WAF 响应已保存：data/raw_html/nhc_gov_cn_homepage_waf_error_20260615_0001.html
+2026-06-15 16:20:48 [ERROR] 检测到站点返回 WAF/JS 校验页。如果是纯 requests 爬虫，不执行 JavaScript，因此无法自动通过该校验。
+2026-06-15 16:20:48 [ERROR] 请设置正确的 Cookie，或使用 DrissionPage 浏览器内核绕过。
+2026-06-15 16:20:48 [INFO] [国家卫生健康委员会] 暂未开启任何栏目抓取
+2026-06-15 16:20:48 [INFO] ============== 成功加载 [国家疾病预防控制局] 解析器 ==============
+2026-06-15 16:20:54 [INFO] [国家疾病预防控制局] 首页 warm-up 成功，已建立 Session/Cookie
+2026-06-15 16:20:54 [INFO] [国家疾病预防控制局] 暂未开启任何栏目抓取
+2026-06-15 16:20:54 [INFO] ============== 成功加载 [中国疾病预防控制中心] 解析器 ==============
+2026-06-15 16:21:03 [INFO] [中国疾病预防控制中心] 首页 warm-up 成功，已建立 Session/Cookie
+2026-06-15 16:21:03 [INFO] [中国疾病预防控制中心] 暂未开启任何栏目抓取
+2026-06-15 16:21:03 [INFO] ============== 成功加载 [中国疾控中心慢病中心] 解析器 ==============
+2026-06-15 16:21:07 [INFO] [中国疾控中心慢病中心] 首页 warm-up 成功，已建立 Session/Cookie
+2026-06-15 16:21:07 [INFO] [中国疾控中心慢病中心] 暂未开启任何栏目抓取
+2026-06-15 16:21:07 [INFO] ============== Loaded registered parser [who_publications] ==============
+2026-06-15 16:21:43 [INFO] [WHO Publications] page 1 parsed 3 items
+2026-06-15 16:31:09 [INFO] ============== Loaded registered parser [who_publications] ==============
+2026-06-15 16:31:12 [INFO] [WHO Publications] page 1 parsed 3 items
+2026-06-15 16:32:13 [INFO] [WHO Publications] page 2 parsed 3 items
+2026-06-15 16:32:13 [INFO] [who_publications] Finished. success=3 failed=0 skipped=0 output=D:\LZH\A-Project\Crawler311\who_crawler\Crawler_Gov\data\output\who\who_publications.jsonl
+2026-06-15 16:49:07 [INFO] ============== Loaded registered parser [who_publications] ==============
+2026-06-15 16:49:10 [INFO] [WHO Publications] page 1 parsed 3 items
+2026-06-15 16:49:49 [INFO] [WHO Publications] page 2 parsed 3 items
+2026-06-15 16:49:49 [INFO] [who_publications] Finished. success=3 failed=0 skipped=0 output=D:\LZH\A-Project\Crawler311\who_crawler\Crawler_Gov\data\output\who\who_publications.jsonl
+2026-06-15 17:03:25 [INFO] ============== Loaded registered parser [who_publications] ==============
+2026-06-15 17:03:29 [INFO] [WHO Publications] page 1 parsed 3 items
+2026-06-15 17:03:55 [INFO] [WHO Publications] page 2 parsed 3 items
+2026-06-15 17:03:55 [INFO] [who_publications] Finished. success=3 failed=0 skipped=0 output=D:\LZH\A-Project\Crawler311\who_crawler\Crawler_Gov\data\output\who\who_publications.jsonl
+2026-06-15 17:05:06 [INFO] ============== Loaded registered parser [who_publications] ==============
+2026-06-15 17:05:10 [INFO] [WHO Publications] page 1 parsed 3 items
+2026-06-15 17:05:30 [ERROR] [WHO Publications] detail failed: https://www.who.int/publications/i/item/9789240121546 error=HTTPSConnectionPool(host='www.who.int', port=443): Read timed out. (read timeout=20)
+2026-06-15 17:05:53 [ERROR] [WHO Publications] detail failed: https://www.who.int/publications/i/item/9789240119482 error=HTTPSConnectionPool(host='www.who.int', port=443): Read timed out. (read timeout=20)
+2026-06-15 17:06:17 [ERROR] [WHO Publications] detail failed: https://www.who.int/publications/i/item/9789240119406 error=HTTPSConnectionPool(host='www.who.int', port=443): Read timed out. (read timeout=20)
+2026-06-15 17:06:21 [INFO] [WHO Publications] page 2 parsed 3 items
+2026-06-15 17:06:21 [INFO] [who_publications] Finished. success=0 failed=3 skipped=0 output=D:\LZH\A-Project\Crawler311\who_crawler\Crawler_Gov\data\output\who\who_publications.jsonl
+2026-06-15 17:06:31 [INFO] ============== Loaded registered parser [who_publications] ==============
+2026-06-15 17:06:33 [INFO] [WHO Publications] page 1 parsed 3 items
+2026-06-15 17:06:40 [INFO] [WHO Publications] page 2 parsed 3 items
+2026-06-15 17:06:40 [INFO] [who_publications] Finished. success=3 failed=0 skipped=0 output=D:\LZH\A-Project\Crawler311\who_crawler\Crawler_Gov\data\output\who\who_publications.jsonl
+2026-06-15 17:08:46 [INFO] ============== Loaded registered parser [who_publications] ==============
+2026-06-15 17:08:48 [INFO] [WHO Publications] page 1 parsed 3 items
+2026-06-15 17:08:54 [INFO] [WHO Publications] page 2 parsed 3 items
+2026-06-15 17:08:54 [INFO] [who_publications] Finished. success=3 failed=0 skipped=0 output=D:\LZH\A-Project\Crawler311\who_crawler\Crawler_Gov\data\output\who\who_publications.jsonl

@@ -17,25 +17,25 @@
         "channel_name": "规范性文件",
         "channel_url": "https://www.nhc.gov.cn/wjw/gfxwjj/list.shtml",
         "default_policy_category": "卫生健康政策",
-        "enabled": true
+        "enabled": false
       },
       {
         "channel_name": "工作通知",
         "channel_url": "https://www.nhc.gov.cn/wjw/gztz/list.shtml",
         "default_policy_category": "工作通知",
-        "enabled": true
+        "enabled": false
       },
       {
         "channel_name": "政策法规",
         "channel_url": "https://www.nhc.gov.cn/wjw/zcfg/list.shtml",
         "default_policy_category": "政策法规",
-        "enabled": true
+        "enabled": false
       },
       {
         "channel_name": "统计数据",
         "channel_url": "https://www.nhc.gov.cn/mohwsbwstjxxzx/tjzxtjsj/tjsj_list.shtml",
         "default_policy_category": "统计数据",
-        "enabled": true
+        "enabled": false
       }
     ]
   },
@@ -55,37 +55,37 @@
         "channel_name": "疾控政策法规",
         "channel_url": "https://www.ndcpa.gov.cn/jbkzzx/c100012/common/list.html",
         "default_policy_category": "政策法规",
-        "enabled": true
+        "enabled": false
       },
       {
         "channel_name": "疾病预防控制标准",
         "channel_url": "https://www.ndcpa.gov.cn/jbkzzx/c100042/common/list.html",
         "default_policy_category": "卫生标准",
-        "enabled": true
+        "enabled": false
       },
       {
         "channel_name": "政策解读",
         "channel_url": "https://www.ndcpa.gov.cn/jbkzzx/c100013/common/list.html", 
         "default_policy_category": "政策解读",
-        "enabled": true
+        "enabled": false
       },
       {
         "channel_name": "疫情信息",
         "channel_url": "https://www.ndcpa.gov.cn/jbkzzx/c100016/second/list.html", 
         "default_policy_category": "疫情信息",
-        "enabled": true
+        "enabled": false
       },
       {
         "channel_name": "法定传染病目录",
         "channel_url": "https://www.ndcpa.gov.cn/jbkzzx/c100041/common/list.html",
         "default_policy_category": "科普信息",
-        "enabled": true
+        "enabled": false
       },
       {
         "channel_name": "疾控科普",
         "channel_url": "https://www.ndcpa.gov.cn/jbkzzx/c100040/common/list.html",
         "default_policy_category": "科普信息",
-        "enabled": true
+        "enabled": false
       }
     ]
   },
@@ -105,109 +105,109 @@
         "channel_name": "全国法定传染病疫情情况",
         "channel_url": "https://www.chinacdc.cn/jksj/jksj01/",
         "default_policy_category": "疫情信息",
-        "enabled": true
+        "enabled": false
       },
       {
         "channel_name": "全国新型冠状病毒感染疫情情况",
         "channel_url": "https://www.chinacdc.cn/jksj/xgbdyq/",
         "default_policy_category": "疫情信息",
-        "enabled": true
+        "enabled": false
       },
       {
         "channel_name": "重点传染病和突发公共卫生事件风险评估报告",
         "channel_url": "https://www.chinacdc.cn/jksj/jksj02/",
         "default_policy_category": "风险评估",
-        "enabled": true
+        "enabled": false
       },
       {
         "channel_name": "全球传染病疫情风险评估报告",
         "channel_url": "https://www.chinacdc.cn/jksj/jksj03/",
         "default_policy_category": "风险评估",
-        "enabled": true
+        "enabled": false
       },
       {
         "channel_name": "全国预防接种异常反应监测信息概况",
         "channel_url": "https://www.chinacdc.cn/jksj/jksj04_14209/",
         "default_policy_category": "健康数据",
-        "enabled": true
+        "enabled": false
       },
       {
         "channel_name": "流感监测周报",
         "channel_url": "https://www.chinacdc.cn/jksj/jksj04_14249/",
         "default_policy_category": "健康数据",
-        "enabled": true
+        "enabled": false
       },
       {
         "channel_name": "全国急性呼吸道传染病哨点监测情况",
         "channel_url": "https://www.chinacdc.cn/jksj/jksj04_14275/",
         "default_policy_category": "健康数据",
-        "enabled": true
+        "enabled": false
       },
       {
         "channel_name": "健康报告",
         "channel_url": "https://www.chinacdc.cn/jksj/jksj04/",
         "default_policy_category": "健康数据",
-        "enabled": true
+        "enabled": false
       },
       {
         "channel_name": "科技进展",
         "channel_url": "https://www.chinacdc.cn/kxyj/kjjz/",
         "default_policy_category": "科研动态",
-        "enabled": true
+        "enabled": false
       },
       {
         "channel_name": "学术动态",
         "channel_url": "https://www.chinacdc.cn/kxyj/xsdt/",
         "default_policy_category": "科研动态",
-        "enabled": true
+        "enabled": false
       },
       {
         "channel_name": "科研平台",
         "channel_url": "https://www.chinacdc.cn/kxyj/xsjl/",
         "default_policy_category": "科研动态",
-        "enabled": true
+        "enabled": false
       },
       {
         "channel_name": "科研亮点",
         "channel_url": "https://www.chinacdc.cn/kxyj/kyld/",
         "default_policy_category": "科研动态",
-        "enabled": true
+        "enabled": false
       },
       {
         "channel_name": "科技成果",
         "channel_url": "https://www.chinacdc.cn/kxyj/kyld_14420/",
         "default_policy_category": "科研动态",
-        "enabled": true
+        "enabled": false
       },
       {
         "channel_name": "科技政策",
         "channel_url": "https://www.chinacdc.cn/kxyj/kjzc/",
         "default_policy_category": "科研动态",
-        "enabled": true
+        "enabled": false
       },
       {
         "channel_name": "合作伙伴",
         "channel_url": "https://www.chinacdc.cn/qqgw/hzhb/",
         "default_policy_category": "全球公卫",
-        "enabled": true
+        "enabled": false
       },
       {
         "channel_name": "世界卫生组织合作中心和参比实验室",
         "channel_url": "https://www.chinacdc.cn/qqgw/wszz/",
         "default_policy_category": "全球公卫",
-        "enabled": true
+        "enabled": false
       },
       {
         "channel_name": "国际交流(港澳台交流)",
         "channel_url": "https://www.chinacdc.cn/qqgw/gjjl/",
         "default_policy_category": "全球公卫",
-        "enabled": true
+        "enabled": false
       },
       {
         "channel_name": "公共卫生援外与合作",
         "channel_url": "https://www.chinacdc.cn/qqgw/ggws/rhcx/",
         "default_policy_category": "全球公卫",
-        "enabled": true
+        "enabled": false
       }
     ]
   },
@@ -227,32 +227,151 @@
         "channel_name": "监测与数据",
         "channel_url": "https://ncncd.chinacdc.cn/jcysj/",
         "default_policy_category": "统计数据",
-        "enabled": true 
+        "enabled": false 
       },
       {
         "channel_name": "健康生活方式",
         "channel_url": "https://ncncd.chinacdc.cn/jkzt_14579/jiankangshfs/",
         "default_policy_category": "健康科普",
-        "enabled": true
+        "enabled": false
       },
       {
         "channel_name": "重点慢病防治",
         "channel_url": "https://ncncd.chinacdc.cn/jkzt_14579/zhongdianmbfz/",
         "default_policy_category": "健康科普",
-        "enabled": true
+        "enabled": false
       },
       {
         "channel_name": "伤害预防",
         "channel_url": "https://ncncd.chinacdc.cn/jkzt_14579/shanghaiyf/",
         "default_policy_category": "健康科普",
-        "enabled": true
+        "enabled": false
       },
       {
         "channel_name": "老年健康",
         "channel_url": "https://ncncd.chinacdc.cn/jkzt_14579/laonianjk/",
         "default_policy_category": "健康科普",
-        "enabled": true
+        "enabled": false
       }
     ]
+  },
+  {
+    "enabled": true,
+    "site_name": "World Health Organization",
+    "site_domain": "who.int",
+    "site_url": "https://www.who.int",
+    "crawler_name": "who_publications",
+    "parser": "who_publications",
+    "source": "WHO",
+    "channel_name": "Publications",
+    "channel_url": "https://www.who.int/publications",
+    "data_source_type": "webpage",
+    "language": "en",
+    "max_pages": 2,
+    "download_attachments": true,
+    "resolve_iris_final_file": true,
+    "use_head_for_attachments": true,
+    "attachment_save": {
+      "base_dir": "data/attachments/who/publications",
+      "group_by": "classification.document_type",
+      "unknown_folder": "unknown"
+    },
+    "image_save": {
+      "base_dir": "data/images/who/publications",
+      "group_by": "classification.document_type",
+      "unknown_folder": "unknown"
+    },
+    "request": {
+      "timeout": 20
+    }
+  },
+  {
+    "enabled": false,
+    "site_name": "World Health Organization",
+    "site_domain": "who.int",
+    "site_url": "https://www.who.int",
+    "crawler_name": "who_disease_outbreak_news",
+    "parser": "who_disease_outbreak_news",
+    "source": "WHO",
+    "channel_name": "Disease Outbreak News",
+    "channel_url": "https://www.who.int/emergencies/disease-outbreak-news",
+    "data_source_type": "webpage",
+    "language": "en",
+    "max_pages": 2,
+    "download_attachments": false,
+    "resolve_iris_final_file": false,
+    "use_head_for_attachments": false,
+    "attachment_save": {
+      "base_dir": "data/attachments/who/disease_outbreak_news",
+      "group_by": "geo.country",
+      "unknown_folder": "unknown"
+    },
+    "request": {
+      "timeout": 20
+    }
+  },
+  {
+    "enabled": false,
+    "site_name": "World Health Organization",
+    "site_domain": "who.int",
+    "site_url": "https://www.who.int",
+    "crawler_name": "who_fact_sheets",
+    "parser": "who_fact_sheets",
+    "source": "WHO",
+    "channel_name": "Fact sheets",
+    "channel_url": "https://www.who.int/news-room/fact-sheets",
+    "data_source_type": "webpage",
+    "language": "en",
+    "max_pages": 2,
+    "download_attachments": false,
+    "resolve_iris_final_file": false,
+    "use_head_for_attachments": false,
+    "attachment_save": {
+      "base_dir": "data/attachments/who/fact_sheets",
+      "group_by": "geo.country",
+      "unknown_folder": "unknown"
+    },
+    "request": {
+      "timeout": 20
+    }
+  },
+  {
+    "enabled": false,
+    "site_name": "World Health Organization",
+    "site_domain": "who.int",
+    "site_url": "https://www.who.int",
+    "crawler_name": "who_health_topics",
+    "parser": "who_health_topics",
+    "source": "WHO",
+    "channel_name": "Health topics",
+    "channel_url": "https://www.who.int/health-topics",
+    "data_source_type": "webpage",
+    "language": "en",
+    "max_pages": 2,
+    "download_attachments": false,
+    "resolve_iris_final_file": false,
+    "use_head_for_attachments": false,
+    "attachment_save": {
+      "base_dir": "data/attachments/who/health_topics",
+      "group_by": "geo.country",
+      "unknown_folder": "unknown"
+    },
+    "request": {
+      "timeout": 20
+    }
+  },
+  {
+    "enabled": false,
+    "site_name": "World Health Organization",
+    "site_domain": "who.int",
+    "site_url": "https://www.who.int",
+    "crawler_name": "who_gho_api",
+    "parser": "who_gho_api",
+    "source": "WHO",
+    "channel_name": "Global Health Observatory",
+    "channel_url": "https://www.who.int/data/gho",
+    "data_source_type": "api",
+    "language": "en",
+    "max_records": 100
   }
 ]

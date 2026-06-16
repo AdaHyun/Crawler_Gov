@@ -20,6 +20,7 @@ JSONL_ORG_MAP = {
     "ndcpa_all_documents.jsonl": "国家疾病预防控制局",
     "chinacdc_all_documents.jsonl": "中国疾病预防控制中心",
     "ncncd_all_documents.jsonl": "中国疾控中心慢病中心",
+    "who/who_publications.jsonl": "World Health Organization",
 }
 
 
@@ -154,6 +155,17 @@ def read_jsonl(path):
                 yield {"_parse_error": f"{path.name}:{line_no}: {exc}", "attachments": []}
 
 
+def iter_output_jsonl():
+    yield from sorted(OUTPUT_DIR.glob("*_all_documents.jsonl"))
+    who_dir = OUTPUT_DIR / "who"
+    if who_dir.exists():
+        yield from sorted(who_dir.glob("*.jsonl"))
+
+
+def output_key(path):
+    return path.relative_to(OUTPUT_DIR).as_posix()
+
+
 def as_list(value):
     return value if isinstance(value, list) else []
 
@@ -221,11 +233,14 @@ def main():
     missing_rows = [["机构", "栏目", "发布日期", "标题", "URL", "来源文件", "doc_id"]]
     channel_stats = defaultdict(lambda: {"docs": 0, "with": 0, "without": 0, "json_attach": 0, "downloaded": 0})
     org_stats = defaultdict(lambda: {"docs": 0, "with": 0, "without": 0, "json_attach": 0, "downloaded": 0})
+    who_article_rows = [article_rows[0]]
+    who_channel_stats = defaultdict(lambda: {"docs": 0, "with": 0, "without": 0, "json_attach": 0, "downloaded": 0})
 
     parse_errors = []
 
-    for jsonl_path in sorted(OUTPUT_DIR.glob("*_all_documents.jsonl")):
-        org = JSONL_ORG_MAP.get(jsonl_path.name, jsonl_path.stem.replace("_all_documents", ""))
+    for jsonl_path in iter_output_jsonl():
+        source_file = output_key(jsonl_path)
+        org = JSONL_ORG_MAP.get(source_file, JSONL_ORG_MAP.get(jsonl_path.name, jsonl_path.stem.replace("_all_documents", "")))
         for record in read_jsonl(jsonl_path):
             if "_parse_error" in record:
                 parse_errors.append(record["_parse_error"])
@@ -264,8 +279,15 @@ def main():
             org_stat["without"] += 1 if has_attachment == "否" else 0
             org_stat["json_attach"] += json_attach_count
             org_stat["downloaded"] += downloaded_count
+            if org == "World Health Organization":
+                who_stat = who_channel_stats[channel]
+                who_stat["docs"] += 1
+                who_stat["with"] += 1 if has_attachment == "是" else 0
+                who_stat["without"] += 1 if has_attachment == "否" else 0
+                who_stat["json_attach"] += json_attach_count
+                who_stat["downloaded"] += downloaded_count
 
-            article_rows.append([
+            row = [
                 org,
                 channel,
                 publish_date,
@@ -276,11 +298,14 @@ def main():
                 has_attachment,
                 attachment_names,
                 attachment_paths,
-                jsonl_path.name,
+                source_file,
                 record.get("doc_id", ""),
-            ])
+            ]
+            article_rows.append(row)
+            if org == "World Health Organization":
+                who_article_rows.append(row)
             if has_attachment == "否":
-                missing_rows.append([org, channel, publish_date, title, url, jsonl_path.name, record.get("doc_id", "")])
+                missing_rows.append([org, channel, publish_date, title, url, source_file, record.get("doc_id", "")])
 
     org_rows = [["机构", "数据条数", "有附件文章数", "无附件文章数", "JSON附件数", "成功下载附件数", "附件目录文件数"]]
     for org, stat in sorted(org_stats.items()):
@@ -316,6 +341,26 @@ def main():
             fs_channel_counts.get((org, channel), 0),
         ])
 
+    who_channel_rows = [[
+        "栏目",
+        "数据条数",
+        "有附件文章数",
+        "无附件文章数",
+        "JSON附件数",
+        "成功下载附件数",
+        "附件目录文件数",
+    ]]
+    for channel, stat in sorted(who_channel_stats.items()):
+        who_channel_rows.append([
+            channel,
+            stat["docs"],
+            stat["with"],
+            stat["without"],
+            stat["json_attach"],
+            stat["downloaded"],
+            fs_channel_counts.get(("who", channel), fs_channel_counts.get(("who", channel.lower()), fs_channel_counts.get(("World Health Organization", channel), 0))),
+        ])
+
     note_rows = [
         ["说明项", "内容"],
         ["统计时间", datetime.now().strftime("%Y-%m-%d %H:%M:%S")],
@@ -336,6 +381,8 @@ def main():
             ("机构汇总", org_rows),
             ("栏目汇总", channel_rows),
             ("文章明细", article_rows),
+            ("WHO栏目汇总", who_channel_rows),
+            ("WHO文章明细", who_article_rows),
             ("无附件文章", missing_rows),
             ("附件目录核对", fs_rows),
         ],
