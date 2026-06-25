@@ -399,5 +399,49 @@
         "enabled": true
       }
     ]
+  },
+  {
+    "site_name": "广东省卫生健康委员会",
+    "site_domain": "wsjkw.gd.gov.cn",
+    "site_url": "https://wsjkw.gd.gov.cn/",
+    "policy_level": "省级",
+    "crawler_name": "gdwsjkw_crawler_v1",
+    "parser_type": "gdwsjkw",
+    "max_pages": 2,
+    "request": {
+      "timeout": 20
+    },
+    "channels": [
+      {
+        "channel_name": "公卫信息",
+        "channel_url": "https://wsjkw.gd.gov.cn/zwyw_yqxx/index.html",
+        "default_policy_category": "公卫信息",
+        "enabled": true
+      },
+      {
+        "channel_name": "国家文件，卫生健康规划计划",
+        "channel_url": "https://wsjkw.gd.gov.cn/gjwj/index.html",
+        "default_policy_category": "卫生健康规划计划",
+        "enabled": true
+      },
+      {
+        "channel_name": "数据发布",
+        "channel_url": "https://wsjkw.gd.gov.cn/zwgk_tjxx/index.html",
+        "default_policy_category": "统计数据",
+        "enabled": true
+      },
+      {
+        "channel_name": "广东省卫生健康委员会规范性文件库",
+        "channel_url": "https://wsjkw.gd.gov.cn/gkmlpt/search?type=standardSearch",
+        "default_policy_category": "规范性文件",
+        "enabled": true
+      },
+      {
+        "channel_name": "政策解读",
+        "channel_url": "https://wsjkw.gd.gov.cn/hdjlpt/c_cat?name=zcjd&via=pc",
+        "default_policy_category": "政策解读",
+        "enabled": true
+      }
+    ]
   }
 ]
