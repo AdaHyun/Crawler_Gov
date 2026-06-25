@@ -256,7 +256,7 @@
     ]
   },
   {
-    "enabled": true,
+    "enabled": false,
     "site_name": "World Health Organization",
     "site_domain": "who.int",
     "site_url": "https://www.who.int",
@@ -268,9 +268,9 @@
     "data_source_type": "webpage",
     "language": "en",
     "max_pages": 2,
-    "download_attachments": true,
-    "resolve_iris_final_file": true,
-    "use_head_for_attachments": true,
+    "download_attachments": false,
+    "resolve_iris_final_file": false,
+    "use_head_for_attachments": false,
     "attachment_save": {
       "base_dir": "data/attachments/who/publications",
       "group_by": "classification.document_type",
@@ -373,5 +373,31 @@
     "data_source_type": "api",
     "language": "en",
     "max_records": 100
+  },
+  {
+    "site_name": "国家心理健康和精神卫生防治中心",
+    "site_domain": "ncmhc.org.cn",
+    "site_url": "https://ncmhc.org.cn/",
+    "policy_level": "国家级",
+    "crawler_name": "ncmhc_crawler_v1",
+    "parser_type": "ncmhc",
+    "max_pages": 2,
+    "request": {
+      "timeout": 20
+    },
+    "channels": [
+      {
+        "channel_name": "新闻资讯",
+        "channel_url": "https://ncmhc.org.cn/news",
+        "default_policy_category": "心理健康与精神卫生",
+        "enabled": true
+      },
+      {
+        "channel_name": "政策法规",
+        "channel_url": "https://ncmhc.org.cn/channel_index/news_zc",
+        "default_policy_category": "心理健康政策法规",
+        "enabled": true
+      }
+    ]
   }
 ]

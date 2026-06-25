@@ -23,3 +23,8 @@ env/
 !/data/output/**
 !/data/logs/
 !/data/logs/**
+!/data/log/
+!/data/log/**
+
+!/data/id—_registry/
+!/data/id—_registry/**

@@ -46,6 +46,35 @@ PARSER_MAP = {
     "who_publications": parse_who_publications,
 }
 
+def _safe_path_part(text: str, default: str = "未命名", max_len: int = 80) -> str:
+    """清理 Windows 路径非法字符，并限制文件夹名长度。"""
+    text = str(text or default)
+    text = re.sub(r'[\\/:*?"<>|]', "_", text)
+    text = re.sub(r"\s+", " ", text).strip()
+    if not text:
+        text = default
+    if len(text) > max_len:
+        text = text[:max_len] + "..."
+    return text
+
+
+def _get_asset_subdir_parts(item: dict) -> list[str]:
+    """
+    读取 parser 写入的可选附件/图片分级目录。
+    普通网站没有这个字段，就返回空列表，不改变原路径。
+    """
+    parts = item.get("crawl", {}).get("asset_subdir_parts", [])
+
+    if not parts:
+        return []
+
+    if isinstance(parts, str):
+        parts = [parts]
+
+    if not isinstance(parts, list):
+        return []
+
+    return [str(part) for part in parts if str(part).strip()]
 
 def setup_who_logger() -> logging.Logger:
     """Create a separate WHO crawl logger under data/log/."""
@@ -402,18 +431,41 @@ def run() -> None:
                     # 调用该站点专属的解析规则
                     detail = parse_detail_page(detail_html, item["url"])
 
-                    safe_site_name = re.sub(r'[\\/:*?"<>|]', '_', site_name)
-                    safe_channel_name = re.sub(r'[\\/:*?"<>|]', '_', channel_name)
+                    # safe_site_name = re.sub(r'[\\/:*?"<>|]', '_', site_name)
+                    # safe_channel_name = re.sub(r'[\\/:*?"<>|]', '_', channel_name)
+                    # current_title = detail.get("title") or item.get("title", "未命名文章")
+                    # safe_article_title = re.sub(r'[\\/:*?"<>|]', '_', current_title)
+
+                    # # 截断过长标题，防止 Windows 路径整体超限报错
+                    # if len(safe_article_title) > 80:
+                    #     safe_article_title = safe_article_title[:80] + "..."
+
+                    # # 自动创建三级专属文件夹
+                    # item_attachment_dir = ATTACHMENT_DIR / safe_site_name / safe_channel_name / safe_article_title
+                    # item_image_dir = IMAGE_DIR / safe_site_name / safe_channel_name / safe_article_title
+                    # item_attachment_dir.mkdir(parents=True, exist_ok=True)
+                    # item_image_dir.mkdir(parents=True, exist_ok=True)
+
+                    safe_site_name = _safe_path_part(site_name, "未知机构")
+                    safe_channel_name = _safe_path_part(channel_name, "未知栏目")
                     current_title = detail.get("title") or item.get("title", "未命名文章")
-                    safe_article_title = re.sub(r'[\\/:*?"<>|]', '_', current_title)
+                    safe_article_title = _safe_path_part(current_title, "未命名文章")
 
-                    # 截断过长标题，防止 Windows 路径整体超限报错
-                    if len(safe_article_title) > 80:
-                        safe_article_title = safe_article_title[:80] + "..."
+                    # 默认基础路径：机构 / 栏目
+                    attachment_base_dir = ATTACHMENT_DIR / safe_site_name / safe_channel_name
+                    image_base_dir = IMAGE_DIR / safe_site_name / safe_channel_name
 
-                    # 自动创建三级专属文件夹
-                    item_attachment_dir = ATTACHMENT_DIR / safe_site_name / safe_channel_name / safe_article_title
-                    item_image_dir = IMAGE_DIR / safe_site_name / safe_channel_name / safe_article_title
+                    # 可选额外分级：只有 parser 写入 crawl.asset_subdir_parts 的文章才会生效
+                    # 例如 NCMHC 政策法规：第一部分 法律
+                    for part in _get_asset_subdir_parts(item):
+                        safe_part = _safe_path_part(part, "未分组")
+                        attachment_base_dir = attachment_base_dir / safe_part
+                        image_base_dir = image_base_dir / safe_part
+
+                    # 最终路径：机构 / 栏目 / [可选分级] / 文章
+                    item_attachment_dir = attachment_base_dir / safe_article_title
+                    item_image_dir = image_base_dir / safe_article_title
+
                     item_attachment_dir.mkdir(parents=True, exist_ok=True)
                     item_image_dir.mkdir(parents=True, exist_ok=True)
 
