@@ -16,10 +16,12 @@ env/
 
 # ignore all data subfolders/files by default
 /data/*
-/data/output/nhc_all_documents.jsonl
-
 # keep only data/output
 !/data/logs/
 !/data/logs/**
+!/data/output/
+!/data/output/**
 
-data/output/
+# but ignore original large output files
+/data/output/nhc_all_documents.jsonl
+/data/output/who/who_publications.jsonl
