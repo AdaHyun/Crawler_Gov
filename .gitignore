@@ -12,19 +12,14 @@ env/
 .idea/
 
 # root zip file
-/data1.zip
+/data.zip
 
 # ignore all data subfolders/files by default
 /data/*
-/data1/
+/data/output/nhc_all_documents.jsonl
 
 # keep only data/output
-!/data/output/
-!/data/output/**
 !/data/logs/
 !/data/logs/**
-!/data/log/
-!/data/log/**
 
-!/data/id—_registry/
-!/data/id—_registry/**
+data/output/

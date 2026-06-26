@@ -15,11 +15,12 @@ DEFAULT_SOURCE_DEPARTMENT = "国家心理健康和精神卫生防治中心"
 
 FILE_EXTENSIONS = (
     "pdf", "doc", "docx", "xls", "xlsx",
-    "ppt", "pptx", "csv", "txt", "zip", "rar", "7z"
+    "ppt", "pptx", "csv", "txt", "zip", "rar", "7z",
+    "mp4", "mov", "m4v", "avi", "wmv", "flv", "webm", "m3u8"
 )
 
 ATTACHMENT_SUFFIX_RE = re.compile(
-    r"\.(pdf|doc|docx|xls|xlsx|ppt|pptx|csv|txt|zip|rar|7z)(?:$|\?|#)",
+    r"\.(pdf|doc|docx|xls|xlsx|ppt|pptx|csv|txt|zip|rar|7z|mp4|mov|m4v|avi|wmv|flv|webm|m3u8)(?:$|\?|#)",
     re.IGNORECASE
 )
 
@@ -234,7 +235,58 @@ def _extract_attachments(html: str, soup: BeautifulSoup, detail_url: str) -> lis
         })
         seen_urls.add(full_url)
 
+        # 3. 扫描正文里的视频资源：
+    # 支持 <video src="...">、<source src="...">、<embed src="...">、<object data="...">
+    for media_tag in soup.find_all(["video", "source", "embed", "object"]):
+        src = (
+            media_tag.get("src")
+            or media_tag.get("data-src")
+            or media_tag.get("data-url")
+            or media_tag.get("data")
+        )
+
+        if not src or src.startswith("data:"):
+            continue
+
+        full_url = urljoin(detail_url, src)
+
+        if full_url in seen_urls:
+            continue
+
+        match = ATTACHMENT_SUFFIX_RE.search(full_url)
+        if not match:
+            # 没有明确视频/文件后缀的播放器地址先不下，避免把网页播放器当文件下载
+            continue
+
+        file_type = match.group(1).lower()
+
+        if file_type not in FILE_EXTENSIONS:
+            continue
+
+        file_name = media_tag.get("title") or media_tag.get("alt") or ""
+        if not file_name:
+            file_name = f"video_{hashlib.md5(full_url.encode()).hexdigest()[:12]}.{file_type}"
+
+        file_name = _clean_file_name(file_name, file_type, fallback_prefix="视频")
+
+        attachments.append({
+            "name": file_name,
+            "url": full_url,
+            "file_type": file_type,
+            "local_path": "",
+            "download_status": "pending"
+        })
+        seen_urls.add(full_url)
+
+        # 本地化换链，和图片逻辑保持类似
+        if media_tag.name in ["video", "source", "embed"]:
+            media_tag["src"] = f"attachments/{file_name}"
+        elif media_tag.name == "object":
+            media_tag["data"] = f"attachments/{file_name}"
+            
     return attachments
+
+    
 
 
 def _safe_image_ext(src: str) -> str:

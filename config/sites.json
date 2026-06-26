@@ -36,6 +36,30 @@
         "channel_url": "https://www.nhc.gov.cn/mohwsbwstjxxzx/tjzxtjsj/tjsj_list.shtml",
         "default_policy_category": "统计数据",
         "enabled": false
+      },
+      {
+        "channel_name": "工作动态",
+        "channel_url": "https://www.nhc.gov.cn/bgt/c100022/new_list.shtml",
+        "default_policy_category": "工作动态",
+        "enabled": false
+      },
+      {
+        "channel_name": "征求意见",
+        "channel_url": "https://www.nhc.gov.cn/wjw/zqyj/list.shtml",
+        "default_policy_category": "征求意见",
+        "enabled": false
+      },
+      {
+        "channel_name": "精神卫生服务年",
+        "channel_url": "https://www.nhc.gov.cn/yzygj/jswsfwn/new_list.shtml",
+        "default_policy_category": "科普视频",
+        "enabled": false
+      },
+      {
+        "channel_name": "法规司-政策文件",
+        "channel_url": "https://www.nhc.gov.cn/fzs/c100048/new_list.shtml",
+        "default_policy_category": "政策法规",
+        "enabled": true
       }
     ]
   },
@@ -85,6 +109,12 @@
         "channel_name": "疾控科普",
         "channel_url": "https://www.ndcpa.gov.cn/jbkzzx/c100040/common/list.html",
         "default_policy_category": "科普信息",
+        "enabled": false
+      },
+      {
+        "channel_name": "规划计划",
+        "channel_url": "https://www.ndcpa.gov.cn/jbkzzx/c100030/second/list.html",
+        "default_policy_category": "规划计划",
         "enabled": false
       }
     ]
@@ -381,7 +411,7 @@
     "policy_level": "国家级",
     "crawler_name": "ncmhc_crawler_v1",
     "parser_type": "ncmhc",
-    "max_pages": 2,
+    "max_pages": 100,
     "request": {
       "timeout": 20
     },
@@ -390,13 +420,13 @@
         "channel_name": "新闻资讯",
         "channel_url": "https://ncmhc.org.cn/news",
         "default_policy_category": "心理健康与精神卫生",
-        "enabled": true
+        "enabled": false
       },
       {
         "channel_name": "政策法规",
         "channel_url": "https://ncmhc.org.cn/channel_index/news_zc",
         "default_policy_category": "心理健康政策法规",
-        "enabled": true
+        "enabled": false
       }
     ]
   },
@@ -407,7 +437,7 @@
     "policy_level": "省级",
     "crawler_name": "gdwsjkw_crawler_v1",
     "parser_type": "gdwsjkw",
-    "max_pages": 2,
+    "max_pages": 100,
     "request": {
       "timeout": 20
     },
@@ -416,31 +446,37 @@
         "channel_name": "公卫信息",
         "channel_url": "https://wsjkw.gd.gov.cn/zwyw_yqxx/index.html",
         "default_policy_category": "公卫信息",
-        "enabled": true
+        "enabled": false
       },
       {
-        "channel_name": "国家文件，卫生健康规划计划",
+        "channel_name": "国家文件",
         "channel_url": "https://wsjkw.gd.gov.cn/gjwj/index.html",
+        "default_policy_category": "国家文件",
+        "enabled": false
+      },
+      {
+        "channel_name": "卫生健康规划计划",
+        "channel_url": "https://wsjkw.gd.gov.cn/zwgk_wsjkghjh/index.html",
         "default_policy_category": "卫生健康规划计划",
-        "enabled": true
+        "enabled": false
       },
       {
         "channel_name": "数据发布",
         "channel_url": "https://wsjkw.gd.gov.cn/zwgk_tjxx/index.html",
         "default_policy_category": "统计数据",
-        "enabled": true
+        "enabled": false
       },
       {
-        "channel_name": "广东省卫生健康委员会规范性文件库",
+        "channel_name": "规范性文件库",
         "channel_url": "https://wsjkw.gd.gov.cn/gkmlpt/search?type=standardSearch",
         "default_policy_category": "规范性文件",
-        "enabled": true
+        "enabled": false
       },
       {
         "channel_name": "政策解读",
-        "channel_url": "https://wsjkw.gd.gov.cn/hdjlpt/c_cat?name=zcjd&via=pc",
+        "channel_url": "https://wsjkw.gd.gov.cn/hdjl_zcjd/index.html",
         "default_policy_category": "政策解读",
-        "enabled": true
+        "enabled": false
       }
     ]
   }
