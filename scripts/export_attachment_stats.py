@@ -21,8 +21,11 @@ JSONL_ORG_MAP = {
     "chinacdc_all_documents.jsonl": "中国疾病预防控制中心",
     "ncncd_all_documents.jsonl": "中国疾控中心慢病中心",
     "who/who_publications.jsonl": "World Health Organization",
-    "gdwsjkw_all_documents.jsonal":"广东省卫生健康委员会",
-    "ncmhc_all_documents.jsonal":"国家心理健康和精神卫生防治中心"
+    "gdwsjkw_all_documents.jsonl":"广东省卫生健康委员会",
+    "ncmhc_all_documents.jsonl":"国家心理健康和精神卫生防治中心",
+    "nhsa_all_documents.jsonl":"国家医疗保障局",
+    "gd_nhsa_all_documents.jsonl":"广东省医疗保障局",
+    "gdcdc_all_documents.jsonl":"广东省疾病预防控制中心"
 }
 
 

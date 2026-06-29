@@ -7,7 +7,7 @@ import re
 # __file__ 指向 scripts/export_to_excel.py，向上两级到达项目根目录
 BASE_DIR = Path(__file__).resolve().parent.parent
 JSON_DIR = BASE_DIR / "data" / "output"
-EXCEL_OUTPUT_PATH = JSON_DIR / "DataSummary.xlsx"
+EXCEL_OUTPUT_PATH = JSON_DIR / "DataSummary_test.xlsx"
 
 
 def safe_sheet_name(name: str) -> str:

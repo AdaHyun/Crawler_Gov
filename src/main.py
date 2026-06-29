@@ -179,6 +179,7 @@ def _update_item_from_detail(item: dict, detail: dict, channel: dict) -> None:
     item["content"]["body_text"] = body_text
     item["content"]["body_html"] = detail.get("body_html", "")
     item["attachments"] = detail.get("attachments", [])
+    item["images"] = detail.get("images", [])
     item["classification"]["document_type"] = infer_document_type(title)
     item["classification"]["policy_category"] = infer_policy_category(
         title,

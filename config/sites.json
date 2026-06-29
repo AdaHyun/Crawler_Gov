@@ -59,7 +59,7 @@
         "channel_name": "法规司-政策文件",
         "channel_url": "https://www.nhc.gov.cn/fzs/c100048/new_list.shtml",
         "default_policy_category": "政策法规",
-        "enabled": true
+        "enabled": false
       }
     ]
   },
@@ -498,7 +498,7 @@
       "asset_subdir_parts": ["监测信息"],
       "channel_url": "https://cdcp.gd.gov.cn/ywdt/tfggwssj/",
       "default_policy_category": "监测信息",
-      "enabled": true
+      "enabled": false
     },
     {
       "channel_name": "政务公开",
@@ -506,7 +506,7 @@
       "asset_subdir_parts": ["通知公告"],
       "channel_url": "https://cdcp.gd.gov.cn/zwgk/tzgg/index.html",
       "default_policy_category": "通知公告",
-      "enabled": true
+      "enabled": false
     },
     {
       "channel_name": "政务公开",
@@ -514,7 +514,7 @@
       "asset_subdir_parts": ["政策法规"],
       "channel_url": "https://cdcp.gd.gov.cn/zwgk/zcfg/flfg/index.html",
       "default_policy_category": "卫生健康政策法规",
-      "enabled": true
+      "enabled": false
     },
     {
       "channel_name": "政务公开",
@@ -522,7 +522,7 @@
       "asset_subdir_parts": ["技术标准与文件"],
       "channel_url": "https://cdcp.gd.gov.cn/zwgk/jsbzywj/index.html",
       "default_policy_category": "技术标准与文件",
-      "enabled": true
+      "enabled": false
     },
     {
       "channel_name": "政务公开",
@@ -530,7 +530,7 @@
       "asset_subdir_parts": ["政策解读"],
       "channel_url": "https://cdcp.gd.gov.cn/zwgk/zcjd/index.html",
       "default_policy_category": "政策解读",
-      "enabled": true
+      "enabled": false
     },
     {
       "channel_name": "政务公开",
@@ -538,7 +538,7 @@
       "asset_subdir_parts": ["数据发布"],
       "channel_url": "https://cdcp.gd.gov.cn/zwgk/sjfb/index.html",
       "default_policy_category": "数据发布",
-      "enabled": true
+      "enabled": false
     },
     {
       "channel_name": "政务公开",
@@ -546,7 +546,7 @@
       "asset_subdir_parts": ["疫情信息"],
       "channel_url": "https://cdcp.gd.gov.cn/zwgk/yqxx/index.html",
       "default_policy_category": "疫情信息",
-      "enabled": true
+      "enabled": false
     },
     {
       "channel_name": "健康教育",
@@ -554,7 +554,7 @@
       "asset_subdir_parts": ["传染病预防与控制"],
       "channel_url": "https://cdcp.gd.gov.cn/jkjy/jkzt/crbyfykz/index.html",
       "default_policy_category": "传染病预防与控制",
-      "enabled": true
+      "enabled": false
     },
     {
       "channel_name": "健康教育",
@@ -562,7 +562,7 @@
       "asset_subdir_parts": ["慢性非传染性疾病防治"],
       "channel_url": "https://cdcp.gd.gov.cn/jkjy/jkzt/mxfcrxjbfz/index.html",
       "default_policy_category": "慢性非传染性疾病防治",
-      "enabled": true
+      "enabled": false
     },
     {
       "channel_name": "健康教育",
@@ -570,7 +570,7 @@
       "asset_subdir_parts": ["寄生虫病防治"],
       "channel_url": "https://cdcp.gd.gov.cn/jkjy/jkzt/jscbfz/index.html",
       "default_policy_category": "寄生虫病防治",
-      "enabled": true
+      "enabled": false
     },
     {
       "channel_name": "健康教育",
@@ -578,7 +578,7 @@
       "asset_subdir_parts": ["消毒与病媒生物控制"],
       "channel_url": "https://cdcp.gd.gov.cn/jkjy/jkzt/xdybmswkz/index.html",
       "default_policy_category": "消毒与病媒生物控制",
-      "enabled": true
+      "enabled": false
     },
     {
       "channel_name": "健康教育",
@@ -586,7 +586,7 @@
       "asset_subdir_parts": ["疫苗与免疫", "免疫接种科普园地"],
       "channel_url": "https://cdcp.gd.gov.cn/jkjy/jkzt/ymymy/myjzkpyd/index.html",
       "default_policy_category": "免疫接种科普园地",
-      "enabled": true
+      "enabled": false
     },
     {
       "channel_name": "健康教育",
@@ -594,7 +594,7 @@
       "asset_subdir_parts": ["疫苗与免疫", "免疫接种政策及技术文件"],
       "channel_url": "https://cdcp.gd.gov.cn/jkjy/jkzt/ymymy/myjzzcjjswj/index.html",
       "default_policy_category": "免疫接种政策及技术文件",
-      "enabled": true
+      "enabled": false
     },
     {
       "channel_name": "健康教育",
@@ -602,7 +602,7 @@
       "asset_subdir_parts": ["环境与学校卫生"],
       "channel_url": "https://cdcp.gd.gov.cn/jkjy/jkzt/hjyxxws/index.html",
       "default_policy_category": "环境与学校卫生",
-      "enabled": true
+      "enabled": false
     },
     {
       "channel_name": "健康教育",
@@ -610,7 +610,7 @@
       "asset_subdir_parts": ["基层卫生与地方病"],
       "channel_url": "https://cdcp.gd.gov.cn/jkjy/jkzt/jcwsydfb/index.html",
       "default_policy_category": "基层卫生与地方病",
-      "enabled": true
+      "enabled": false
     },
     {
       "channel_name": "健康教育",
@@ -618,7 +618,7 @@
       "asset_subdir_parts": ["营养与食品安全"],
       "channel_url": "https://cdcp.gd.gov.cn/jkjy/jkzt/yyyspaq/index.html",
       "default_policy_category": "营养与食品安全",
-      "enabled": true
+      "enabled": false
     },
     {
       "channel_name": "健康教育",
@@ -626,7 +626,7 @@
       "asset_subdir_parts": ["卫生应急管理", "卫生应急科普园地"],
       "channel_url": "https://cdcp.gd.gov.cn/jkjy/jkzt/wsyjgl/wsyjkpyd/index.html",
       "default_policy_category": "卫生应急科普园地",
-      "enabled": true
+      "enabled": false
     },
     {
       "channel_name": "健康教育",
@@ -634,7 +634,7 @@
       "asset_subdir_parts": ["卫生应急管理", "卫生应急文件"],
       "channel_url": "https://cdcp.gd.gov.cn/jkjy/jkzt/wsyjgl/wsyjwj/index.html",
       "default_policy_category": "卫生应急文件",
-      "enabled": true
+      "enabled": false
     },
     {
       "channel_name": "健康教育",
@@ -642,7 +642,7 @@
       "asset_subdir_parts": ["卫生应急管理", "应急响应"],
       "channel_url": "https://cdcp.gd.gov.cn/jkjy/jkzt/wsyjgl/yjxy/index.html",
       "default_policy_category": "应急响应",
-      "enabled": true
+      "enabled": false
     },
     {
       "channel_name": "健康教育",
@@ -650,7 +650,7 @@
       "asset_subdir_parts": ["艾滋病防治", "性传播疾病预防科普园地"],
       "channel_url": "https://cdcp.gd.gov.cn/jkjy/jkzt/azbfz/xcbjbyfkpyd/index.html",
       "default_policy_category": "性传播疾病预防科普园地",
-      "enabled": true
+      "enabled": false
     },
     {
       "channel_name": "健康教育",
@@ -658,7 +658,94 @@
       "asset_subdir_parts": ["艾滋病防治", "艾滋病防治文件"],
       "channel_url": "https://cdcp.gd.gov.cn/jkjy/jkzt/azbfz/azbfzwj/index.html",
       "default_policy_category": "艾滋病防治文件",
-      "enabled": true
+      "enabled": false
+    }
+  ]
+},
+{
+  "site_name": "食品安全国家标准数据检索平台",
+  "site_domain": "sppt.cfsa.net.cn",
+  "site_url": "https://sppt.cfsa.net.cn:8086/db",
+  "parser_type": "cfsa",
+  "enabled": false,
+  "max_pages": 1,
+  "request": {
+    "timeout": 20,
+    "browser_cookie": ""
+  },
+  "channels": [
+    {
+      "channel_name": "标准文本",
+      "channel_url": "https://sppt.cfsa.net.cn:8086/db",
+      "query_type": "2",
+      "enabled": false,
+      "default_policy_category": "食品安全国家标准"
+    },
+    {
+      "channel_name": "标准勘误",
+      "channel_url": "https://sppt.cfsa.net.cn:8086/db",
+      "query_type": "3",
+      "enabled": false,
+      "default_policy_category": "食品安全国家标准"
+    },
+    {
+      "channel_name": "标准解读",
+      "channel_url": "https://sppt.cfsa.net.cn:8086/db",
+      "query_type": "4",
+      "enabled": false,
+      "default_policy_category": "食品安全国家标准"
+    }
+  ]
+},
+{
+  "site_name": "中国老龄协会",
+  "site_domain": "www.cncaprc.gov.cn",
+  "site_url": "https://www.cncaprc.gov.cn/",
+  "parser_type": "cncaprc",
+  "enabled": true,
+  "max_pages": 99,
+  "request": {
+    "timeout": 20,
+    "browser_cookie": ""
+  },
+  "channels": [
+    {
+      "channel_name": "健康科普",
+      "channel_url": "https://www.cncaprc.gov.cn/jkkp.jhtml",
+      "enabled": true,
+      "default_policy_category": "健康科普"
+    }
+  ]
+},
+{
+  "site_name": "国家中医药管理局",
+  "site_domain": "www.natcm.gov.cn",
+  "site_url": "http://www.natcm.gov.cn/",
+  "parser_type": "natcm",
+  "enabled": true,
+  "max_pages": 99,
+  "request": {
+    "timeout": 20,
+    "browser_cookie": ""
+  },
+  "channels": [
+    {
+      "channel_name": "政策文件",
+      "channel_url": "http://www.natcm.gov.cn/a/zcwj/index.html",
+      "enabled": true,
+      "default_policy_category": "政策文件"
+    },
+    {
+      "channel_name": "政策解读",
+      "channel_url": "http://www.natcm.gov.cn/a/zcjd/index.html",
+      "enabled": true,
+      "default_policy_category": "政策解读"
+    },
+    {
+      "channel_name": "通知公告",
+      "channel_url": "http://www.natcm.gov.cn/a/tzgg/index.html",
+      "enabled": true,
+      "default_policy_category": "通知公告"
     }
   ]
 }
