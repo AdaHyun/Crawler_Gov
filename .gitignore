@@ -25,3 +25,5 @@ env/
 # but ignore original large output files
 /data/output/nhc_all_documents.jsonl
 /data/output/who/who_publications.jsonl
+/data/output/gdcdc_all_documents.jsonl
+/data/output/各栏目JSONL
